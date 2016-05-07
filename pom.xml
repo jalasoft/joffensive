@@ -5,14 +5,28 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cz.jalasoft.joffensive</groupId>
-    <artifactId>joffensive-core</artifactId>
+    <artifactId>joffensive-parent</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+
+    <modules>
+        <module>joffensive-http</module>
+        <module>joffensive-core</module>
+    </modules>
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.2</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.21</version>
+        </dependency>
+
+        <!-- TEST -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.7</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
