@@ -57,4 +57,8 @@ public final class WeaponProxy implements Weapon {
         }
         return (Exception) cause;
     }
+
+    public String name() {
+        return definition.name();
+    }
 }

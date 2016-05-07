@@ -1,12 +1,14 @@
 package cz.jalasoft.joffensive.core;
 
 
-import cz.jalasoft.joffensive.core.weapon.WeaponDefinition;
+import cz.jalasoft.joffensive.core.weapon.WeaponFactory;
 import cz.jalasoft.joffensive.core.weapon.WeaponRegistry;
-import cz.jalasoft.joffensive.core.weapon.annotation.introspection.WeaponAnnotationIntrospection;
+import cz.jalasoft.joffensive.core.weapon.annotation.introspection.WeaponIntrospectionException;
 
-import java.util.Collection;
 import java.util.NoSuchElementException;
+
+import static cz.jalasoft.joffensive.core.weapon.annotation.introspection.WeaponAnnotationIntrospection.forPackage;
+import static cz.jalasoft.joffensive.core.weapon.annotation.introspection.WeaponAnnotationIntrospection.forType;
 
 /**
  * @author Honza Lastovicka (lastovicka@avast.com)
@@ -22,9 +24,11 @@ public final class JOffensive {
     //INSTANCE SCOPE
     //-----------------------------------------------------
 
+    private final WeaponFactory weaponFactory;
     private final WeaponRegistry weaponRegistry;
 
     private JOffensive() {
+        this.weaponFactory = new WeaponFactory();
         weaponRegistry = new WeaponRegistry();
     }
 
@@ -37,7 +41,7 @@ public final class JOffensive {
             throw new IllegalArgumentException("Name of weapon must not be null or empty.");
         }
 
-        if (weaponRegistry.weapon(name).isPresent()) {
+        if (weaponRegistry.hasWeapon(name)) {
             throw new IllegalArgumentException("Weapon with name '" + name + "' already exists.");
         }
 
@@ -49,18 +53,30 @@ public final class JOffensive {
             throw new IllegalArgumentException("Class must not be null.");
         }
 
-        WeaponDefinition definition = WeaponAnnotationIntrospection.introspectType(type);
-
-        weaponRegistry.registerWeapon(definition);
+        try {
+            forType(type)
+                    .introspect()
+                    .stream()
+                    .map(weaponFactory::newWeapon)
+                    .forEach(w -> weaponRegistry.registerWeapon(w.name(), w));
+        } catch (WeaponIntrospectionException exc) {
+            throw new RuntimeException(exc);
+        }
     }
 
     public void registerWeaponsInPackage(String packageName) {
         if (packageName == null || packageName.isEmpty()) {
             throw new IllegalArgumentException("Package name must not be null or empty.");
         }
-
-        Collection<WeaponDefinition> definitions  = WeaponAnnotationIntrospection.introspectPackage(packageName);
-        weaponRegistry.registerWeapons(definitions);
+        try {
+            forPackage(packageName)
+                    .introspect()
+                    .stream()
+                    .map(weaponFactory::newWeapon)
+                    .forEach(w -> weaponRegistry.registerWeapon(w.name(), w));
+        } catch (WeaponIntrospectionException exc) {
+            throw new RuntimeException(exc);
+        }
     }
 
     //----------------------------------------------------------------------
@@ -80,6 +96,10 @@ public final class JOffensive {
             throw new IllegalArgumentException("Name of weapon must not be null or empty.");
         }
 
-        return weaponRegistry.weapon(name).orElseThrow(() -> new NoSuchElementException("No weapon of name '" + name + "' exists."));
+        if (!weaponRegistry.hasWeapon(name)) {
+            new NoSuchElementException("No weapon of name '" + name + "' exists.");
+        }
+
+        return weaponRegistry.weapon(name);
     }
 }

@@ -71,21 +71,33 @@ public final class WeaponDefinition {
         }
 
         public Builder called(String name) {
+            if (name == null || name.isEmpty()) {
+                throw new IllegalArgumentException("Name mut not be null or empty.");
+            }
             this.name = name;
             return this;
         }
 
         public Builder preparing(Invokable<Void> invokable) {
+            if (invokable == null) {
+                throw new IllegalArgumentException("Preparing invokable must not be null or empty.");
+            }
             this.prepareInvokable = invokable;
             return this;
         }
 
         public Builder shooting(Invokable<Recoil> invokable) {
+            if (invokable == null) {
+                throw new IllegalArgumentException("Shooting invokable must not be null or empty.");
+            }
             this.shootInvokable = invokable;
             return this;
         }
 
         public Builder cleaning(Invokable<Void> invokable) {
+            if (invokable == null) {
+                throw new IllegalArgumentException("Cleaning invokable must not be null or empty.");
+            }
             this.cleanInvokable = invokable;
             return this;
         }

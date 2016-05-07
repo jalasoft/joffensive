@@ -11,44 +11,27 @@ import java.util.*;
 public final class WeaponRegistry {
 
     private final Map<String, Weapon> weapons;
-    private final Collection<WeaponDefinition> definitions;
 
     public WeaponRegistry() {
         this.weapons = new HashMap<>();
-        this.definitions = new ArrayList<>();
-
-    }
-
-    public void registerWeapons(Iterable<WeaponDefinition> definitions) {
-        definitions.forEach(this::registerWeapon);
-    }
-
-    public void registerWeapon(WeaponDefinition definition) {
-        //TODO if exists?
     }
 
     public void registerWeapon(String name, Weapon weapon) {
-        //TODO
+        if (weapons.containsKey(name)) {
+            throw new IllegalArgumentException("Weapon called '" + name + "' already exists.");
+        }
+
+        weapons.put(name, weapon);
     }
 
-    public Optional<Weapon> weapon(String name) {
-        Weapon weapon = weapons.get(name);
+    public boolean hasWeapon(String name) {
+        return weapons.containsKey(name);
+    }
 
-        if (weapon != null) {
-            return Optional.of(weapon);
+    public Weapon weapon(String name) {
+        if (!hasWeapon(name)) {
+            throw new IllegalArgumentException("Weapon called '" + name + "' does not exists.");
         }
-
-        Optional<WeaponDefinition> definition = definitions
-                .stream()
-                .filter(def -> def.name().equals(name))
-                .findAny();
-
-        if (!definition.isPresent()) {
-            return Optional.empty();
-        }
-
-        //TODO
-
-        return null;
+        return weapons.get(name);
     }
 }

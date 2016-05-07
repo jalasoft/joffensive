@@ -65,6 +65,11 @@ public final class Warrior implements Runnable {
         }
 
         LOGGER.debug(name + ": --> --> -->");
-        weapon.shoot();
+
+        try {
+            weapon.shoot();
+        } catch (Exception exc) {
+            //TODO
+        }
     }
 }

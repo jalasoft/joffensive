@@ -75,8 +75,17 @@ final class ClassWeaponIntrospection implements WeaponAnnotationIntrospection {
 
     private void validatePrepareAnnotatedMethodSignature() throws WeaponIntrospectionException {
         Method prepareMethod = examinedType.annotatedMethod(PrepareWeapon.class);
-        if (!MethodUtils.isMethodPublicParameterlessAndReturning(prepareMethod, Void.class)) {
-            throw new WeaponIntrospectionException("Prepare method on type " + examinedType.typeName() + " must be public, parameterless and void.");
+
+        if (!MethodUtils.isPublic(prepareMethod)) {
+            throw new WeaponIntrospectionException("Prepare method '" + prepareMethod.getName() + "' on type '" + examinedType.typeName() + "' must be public");
+        }
+
+        if (!MethodUtils.isParameterless(prepareMethod)) {
+            throw new WeaponIntrospectionException("Prepare method '" + prepareMethod.getName() + "' on type '" + examinedType.typeName() + "' must be parameterless");
+        }
+
+        if (!MethodUtils.isVoid(prepareMethod)) {
+            throw new WeaponIntrospectionException("Prepare method '" + prepareMethod.getName() + "' on type '" + examinedType.typeName() + "' must be void");
         }
     }
 
@@ -99,8 +108,17 @@ final class ClassWeaponIntrospection implements WeaponAnnotationIntrospection {
 
     private void validateCleanAnnotatedMethodSignature() throws WeaponIntrospectionException {
         Method cleanMethod = examinedType.annotatedMethod(CleanWeapon.class);
-        if (!MethodUtils.isMethodPublicParameterlessAndReturning(cleanMethod, Void.class)) {
-            throw new WeaponIntrospectionException("Clean method on type " + examinedType.typeName() + " must be public, parameterless and void.");
+
+        if (!MethodUtils.isPublic(cleanMethod)) {
+            throw new WeaponIntrospectionException("Prepare method '" + cleanMethod.getName() + "' on type '" + examinedType.typeName() + "' must be public");
+        }
+
+        if (!MethodUtils.isParameterless(cleanMethod)) {
+            throw new WeaponIntrospectionException("Prepare method '" + cleanMethod.getName() + "' on type '" + examinedType.typeName() + "' must be parameterless");
+        }
+
+        if (!MethodUtils.isVoid(cleanMethod)) {
+            throw new WeaponIntrospectionException("Prepare method '" + cleanMethod.getName() + "' on type '" + examinedType.typeName() + "' must be void");
         }
     }
 
@@ -113,7 +131,7 @@ final class ClassWeaponIntrospection implements WeaponAnnotationIntrospection {
 
 
     private void validateParameterlessConstructor() throws WeaponIntrospectionException {
-        if(!examinedType.hasPublicParameterlessConstructor()) {
+        if(!examinedType.hasDefaultConstructor()) {
             throw new WeaponIntrospectionException("Type " + examinedType.typeName() + " does not have parameterless constructor.");
         }
     }
@@ -136,6 +154,19 @@ final class ClassWeaponIntrospection implements WeaponAnnotationIntrospection {
 
     private void validateShootAnnotatedMethodSignature() throws WeaponIntrospectionException {
         Method shootMethod = examinedType.annotatedMethod(Shoot.class);
+
+        if (!MethodUtils.isPublic(shootMethod)) {
+            throw new WeaponIntrospectionException("Shoot method '" + shootMethod.getName() + "' on type '" + examinedType.typeName() + "' must be public");
+        }
+
+        if (!MethodUtils.isParameterless(shootMethod)) {
+            throw new WeaponIntrospectionException("Shoot method '" + shootMethod.getName() + "' on type '" + examinedType.typeName() + "' must be parameterless");
+        }
+
+        if (!MethodUtils.isReturning(shootMethod, Recoil.class)) {
+            throw new WeaponIntrospectionException("Shoot method '" + shootMethod.getName() + "' on type '" + examinedType.typeName() + "' must be void");
+        }
+
         if (!MethodUtils.isMethodPublicParameterlessAndReturning(shootMethod, Recoil.class)) {
             throw new WeaponIntrospectionException("Shoot method on type " + examinedType.typeName() + " must be public, parameterless and returning Recoil.");
         }

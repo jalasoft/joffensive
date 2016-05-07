@@ -1,6 +1,7 @@
 package cz.jalasoft.joffensive.test;
 
 
+import cz.jalasoft.joffensive.core.Recoil;
 import cz.jalasoft.joffensive.core.weapon.annotation.CleanWeapon;
 import cz.jalasoft.joffensive.core.weapon.annotation.PrepareWeapon;
 import cz.jalasoft.joffensive.core.weapon.annotation.Shoot;
@@ -18,8 +19,9 @@ public class HovnoWeapon {
     }
 
     @Shoot("hovnomet")
-    public void g() {
+    public Recoil g() {
         System.out.println("Striliiiiim");
+        return null;
     }
 
     @CleanWeapon

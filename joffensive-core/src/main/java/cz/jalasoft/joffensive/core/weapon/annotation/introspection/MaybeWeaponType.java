@@ -19,8 +19,10 @@ final class MaybeWeaponType {
         this.examinedType = examminedType;
     }
 
-    boolean hasPublicParameterlessConstructor() {
-        for(Constructor<?> constructor : examinedType.getConstructors()) {
+    boolean hasDefaultConstructor() {
+        Constructor<?>[] constructors = examinedType.getConstructors();
+
+        for(Constructor<?> constructor : constructors) {
             if (MethodUtils.isPublic(constructor) && MethodUtils.isParameterless(constructor)) {
                 return true;
             }
@@ -52,7 +54,7 @@ final class MaybeWeaponType {
     }
 
     String typeName() {
-        return examinedType.getClass().getName();
+        return examinedType.getName();
     }
 
     Class<?> type() {

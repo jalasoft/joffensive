@@ -38,7 +38,7 @@ public class AnotherDesignTester {
     }
 */
     @Test
-    public void scansWeaponAndRegistersItAndRetrievesItAndShoots() {
+    public void scansWeaponAndRegistersItAndRetrievesItAndShoots() throws Exception {
 
         JOffensive g = JOffensive.newOffensive();
         g.registerWeaponsInPackage("cz.jalasoft.joffensive");
