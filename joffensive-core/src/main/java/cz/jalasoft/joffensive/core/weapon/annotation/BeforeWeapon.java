@@ -7,9 +7,9 @@ import java.lang.annotation.Target;
 
 /**
  * @author Honza Lastovicka (lastovicka@avast.com)
- * @since 2016-04-27.
+ * @since 2016-05-08.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface CleanWeapon {
+public @interface BeforeWeapon {
 }

@@ -20,16 +20,20 @@ public final class WeaponDefinition {
     private final String name;
     private final Class<?> type;
 
-    private final Invokable<Void> prepareInvokable;
-    private final Invokable<Void> cleanInvokable;
+    private final Invokable<Void> beforeWeaponInvokable;
+    private final Invokable<Void> beforeShootInvokable;
     private final Invokable<Recoil> shootInvokable;
+    private final Invokable<Void> afterShootInvokable;
+    private final Invokable<Void> afterWeaponInvokable;
 
     private WeaponDefinition(Builder builder) {
         this.name = builder.name;
         this.type = builder.type;
-        this.prepareInvokable = builder.prepareInvokable;
-        this.cleanInvokable = builder.cleanInvokable;
+        this.beforeWeaponInvokable = builder.beforeWeaponInvokable;
+        this.beforeShootInvokable = builder.beforeShootInvokable;
         this.shootInvokable = builder.shootInvokable;
+        this.afterShootInvokable = builder.afterShootInvokable;
+        this.afterWeaponInvokable = builder.afterWeaponInvokable;
     }
 
     public String name() {
@@ -40,16 +44,24 @@ public final class WeaponDefinition {
         return type;
     }
 
-    public Invokable<Void> prepare() {
-        return prepareInvokable;
+    public Invokable<Void> beforeWeapon() {
+        return beforeWeaponInvokable;
     }
 
-    public Invokable<Void> clean() {
-        return cleanInvokable;
+    public Invokable<Void> beforeShoot() {
+        return beforeShootInvokable;
     }
 
     public Invokable<Recoil> shoot() {
         return shootInvokable;
+    }
+
+    public Invokable<Void> afterShoot() {
+        return afterShootInvokable;
+    }
+
+    public Invokable<Void> afterWeapon() {
+        return afterWeaponInvokable;
     }
 
     //---------------------------------------------------
@@ -61,9 +73,11 @@ public final class WeaponDefinition {
         private String name;
         private Class<?> type;
 
-        private Invokable<Void> prepareInvokable = Invokable.DUMMY;
-        private Invokable<Void> cleanInvokable = Invokable.DUMMY;
+        private Invokable<Void> beforeWeaponInvokable = Invokable.DUMMY;
+        private Invokable<Void> beforeShootInvokable = Invokable.DUMMY;
         private Invokable<Recoil> shootInvokable;
+        private Invokable<Void> afterShootInvokable = Invokable.DUMMY;
+        private Invokable<Void> afterWeaponInvokable = Invokable.DUMMY;
 
         public Builder on(Class<?> type) {
             this.type = type;
@@ -78,11 +92,19 @@ public final class WeaponDefinition {
             return this;
         }
 
-        public Builder preparing(Invokable<Void> invokable) {
+        public Builder beforeWeapon(Invokable<Void> invokable) {
             if (invokable == null) {
                 throw new IllegalArgumentException("Preparing invokable must not be null or empty.");
             }
-            this.prepareInvokable = invokable;
+            this.beforeWeaponInvokable = invokable;
+            return this;
+        }
+
+        public Builder beforeShoot(Invokable<Void> invokable) {
+            if (invokable == null) {
+                throw new IllegalArgumentException("Preparing invokable must not be null or empty.");
+            }
+            this.beforeShootInvokable = invokable;
             return this;
         }
 
@@ -94,11 +116,19 @@ public final class WeaponDefinition {
             return this;
         }
 
-        public Builder cleaning(Invokable<Void> invokable) {
+        public Builder afterShoot(Invokable<Void> invokable) {
             if (invokable == null) {
                 throw new IllegalArgumentException("Cleaning invokable must not be null or empty.");
             }
-            this.cleanInvokable = invokable;
+            this.afterShootInvokable = invokable;
+            return this;
+        }
+
+        public Builder afterWeapon(Invokable<Void> invokable) {
+            if (invokable == null) {
+                throw new IllegalArgumentException("Cleaning invokable must not be null or empty.");
+            }
+            this.afterWeaponInvokable = invokable;
             return this;
         }
 

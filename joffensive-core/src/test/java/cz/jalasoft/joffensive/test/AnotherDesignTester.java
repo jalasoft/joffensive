@@ -47,6 +47,16 @@ public class AnotherDesignTester {
 
         Assert.assertNotNull(weapon);
 
+        Platoon platoon = g
+                .trainingCamp()
+                .ofRecruits(4)
+                .name("Bazanti")
+                .shooting(EvenCadence.evenly().everySecond(4))
+                .havingMagazinesOfSize(2)
+                .graduate();
+
+        platoon.regroup()
+
         weapon.shoot();
 
         /*

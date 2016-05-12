@@ -19,11 +19,11 @@ import static java.util.stream.Collectors.*;
  * @author Honza Lastovicka (lastovicka@avast.com)
  * @since 2016-05-03.
  */
-final class PackageWeaponIntropection implements WeaponAnnotationIntrospection {
+final class WeaponPackageIntrospection implements WeaponAnnotationIntrospection {
 
     private final Reflections reflections;
 
-    PackageWeaponIntropection(String packageName) {
+    WeaponPackageIntrospection(String packageName) {
         this.reflections = initializeReflections(packageName);
     }
 

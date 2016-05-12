@@ -2,8 +2,8 @@ package cz.jalasoft.joffensive.test;
 
 
 import cz.jalasoft.joffensive.core.Recoil;
-import cz.jalasoft.joffensive.core.weapon.annotation.CleanWeapon;
-import cz.jalasoft.joffensive.core.weapon.annotation.PrepareWeapon;
+import cz.jalasoft.joffensive.core.weapon.annotation.BeforeShoot;
+import cz.jalasoft.joffensive.core.weapon.annotation.AfterShoot;
 import cz.jalasoft.joffensive.core.weapon.annotation.Shoot;
 
 /**
@@ -13,7 +13,7 @@ import cz.jalasoft.joffensive.core.weapon.annotation.Shoot;
 
 public class HovnoWeapon {
 
-    @PrepareWeapon
+    @BeforeShoot
     public void nabij() {
         System.out.println("Nabijim zbran");
     }
@@ -24,7 +24,7 @@ public class HovnoWeapon {
         return null;
     }
 
-    @CleanWeapon
+    @AfterShoot
     public void vycisti() {
         System.out.println("Cistim zbran");
     }

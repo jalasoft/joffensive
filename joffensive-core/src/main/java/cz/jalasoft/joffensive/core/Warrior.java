@@ -13,16 +13,12 @@ public final class Warrior implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Warrior.class);
 
-    private final String name;
     private final Weapon weapon;
-    private final Cadence cadence;
-    private final int magazineSize;
+    private final TrainingCamp trainingCamp;
 
-    public Warrior(String name, Weapon weapon, Cadence cadence, int magazineSize) {
-        this.name = name;
+    public Warrior(Weapon weapon, TrainingCamp trainingCamp) {
         this.weapon = weapon;
-        this.cadence = cadence;
-        this.magazineSize = magazineSize;
+        this.trainingCamp = trainingCamp;
     }
 
     @Override
@@ -31,7 +27,6 @@ public final class Warrior implements Runnable {
            runInterruptibly();
        } catch (InterruptedException exc) {
            Thread.currentThread().interrupt();
-           return;
        }
     }
 
@@ -39,7 +34,7 @@ public final class Warrior implements Runnable {
         int secondsSinceStart = 0;
 
         while(true) {
-            if (cadence.shootNow(secondsSinceStart)) {
+            if (trainingCamp.cadence.shootNow(secondsSinceStart)) {
                 shootMagazineOut();
             } else {
                 LOGGER.debug(name + ": .");
@@ -52,7 +47,7 @@ public final class Warrior implements Runnable {
     }
 
     private void shootMagazineOut() throws InterruptedException {
-        ;
+
         for(int i=0; i<magazineSize; i++) {
             shootBulletInterruptibly();
         }

@@ -12,11 +12,11 @@ import java.util.Collection;
 public interface WeaponAnnotationIntrospection {
 
     static WeaponAnnotationIntrospection forType(Class<?> type) {
-        return new ClassWeaponIntrospection(type);
+        return new WeaponClassIntrospection(type);
     }
 
     static WeaponAnnotationIntrospection forPackage(String packageName) {
-        return new PackageWeaponIntropection(packageName);
+        return new WeaponPackageIntrospection(packageName);
     }
 
     Collection<WeaponDefinition> introspect() throws WeaponIntrospectionException;

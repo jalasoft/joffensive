@@ -1,6 +1,7 @@
 package cz.jalasoft.joffensive.core;
 
 
+import cz.jalasoft.joffensive.core.battle.BattleBootstrap;
 import cz.jalasoft.joffensive.core.weapon.WeaponFactory;
 import cz.jalasoft.joffensive.core.weapon.WeaponRegistry;
 import cz.jalasoft.joffensive.core.weapon.annotation.introspection.WeaponIntrospectionException;
@@ -27,9 +28,13 @@ public final class JOffensive {
     private final WeaponFactory weaponFactory;
     private final WeaponRegistry weaponRegistry;
 
+    private final BattleBootstrap battleBootstrap;
+
     private JOffensive() {
         this.weaponFactory = new WeaponFactory();
-        weaponRegistry = new WeaponRegistry();
+        this.weaponRegistry = new WeaponRegistry();
+
+        this.battleBootstrap = new BattleBootstrap();
     }
 
     //------------------------------------------------------------------
@@ -84,7 +89,7 @@ public final class JOffensive {
     //----------------------------------------------------------------------
 
     public TrainingCamp trainingCamp() {
-        return new TrainingCamp();
+        return new TrainingCamp(battleBootstrap);
     }
 
     //-----------------------------------------------------------------------

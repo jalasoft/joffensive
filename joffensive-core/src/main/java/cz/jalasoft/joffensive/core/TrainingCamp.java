@@ -1,5 +1,9 @@
 package cz.jalasoft.joffensive.core;
 
+import cz.jalasoft.joffensive.core.battle.BattleBootstrap;
+import cz.jalasoft.joffensive.core.platoon.SinglePlatoon;
+import cz.jalasoft.joffensive.core.platoon.Skill;
+
 import java.util.function.Supplier;
 
 /**
@@ -12,6 +16,12 @@ public final class TrainingCamp {
     int recruitsCount;
     Cadence cadence;
     int magazineSize;
+
+    private final BattleBootstrap battleBootstrap;
+
+    TrainingCamp(BattleBootstrap battleBootstrap) {
+        this.battleBootstrap = battleBootstrap;
+    }
 
     public TrainingCamp ofRecruits(int number) {
         if (number < 1) {
@@ -59,7 +69,7 @@ public final class TrainingCamp {
 
     public Platoon graduate() {
         checkAllInserted();
-        return new HomogenousPlatoon(this);
+        return new SinglePlatoon(name, recruitsCount, new Skill(cadence, magazineSize), battleBootstrap);
     }
 
     private void checkAllInserted() {

@@ -6,9 +6,13 @@ package cz.jalasoft.joffensive.core;
  */
 public interface Weapon {
 
-    default void prepareWeapon() throws Exception {}
+    default void beforeWeapon() throws Exception {}
+
+    default void beforeShoot() throws Exception {}
 
     Recoil shoot() throws Exception;
 
-    default void cleanupWeapon() throws Exception {}
+    default void afterShoot() throws Exception {}
+
+    default void afterWeapon() throws Exception {}
 }
