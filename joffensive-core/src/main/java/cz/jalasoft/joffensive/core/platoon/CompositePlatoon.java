@@ -22,7 +22,7 @@ public final class CompositePlatoon extends AbstractPlatoon {
     }
 
     @Override
-    protected Collection<SinglePlatoon> platoons() {
+    public Collection<SinglePlatoon> platoons() {
         return platoons;
     }
 

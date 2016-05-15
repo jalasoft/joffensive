@@ -24,7 +24,7 @@ public final class SinglePlatoon extends AbstractPlatoon {
     }
 
     @Override
-    protected Collection<SinglePlatoon> platoons() {
+    public Collection<SinglePlatoon> platoons() {
         return Arrays.asList(this);
     }
 

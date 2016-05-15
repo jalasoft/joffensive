@@ -4,6 +4,8 @@ import cz.jalasoft.joffensive.core.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author Honza Lastovicka (lastovicka@avast.com)
  * @since 2016-04-21.
@@ -55,9 +57,13 @@ public class AnotherDesignTester {
                 .havingMagazinesOfSize(2)
                 .graduate();
 
-        platoon.regroup()
 
-        weapon.shoot();
+        Battle battle = platoon.fire(weapon);
+
+        TimeUnit.SECONDS.sleep(10);
+
+        battle.ceaseFire();
+
 
         /*
         JOffensive o = new JOffensive();

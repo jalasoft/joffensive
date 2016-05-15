@@ -15,4 +15,14 @@ public final class Skill {
         this.candence = candence;
         this.magazineSize = magazineSize;
     }
+
+    public Cadence cadence() {
+        return this.candence;
+    }
+
+    public int magazineSize() {
+        return magazineSize;
+    }
+
+    //TODO
 }

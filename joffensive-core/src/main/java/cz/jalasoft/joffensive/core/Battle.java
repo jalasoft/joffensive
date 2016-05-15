@@ -5,4 +5,9 @@ package cz.jalasoft.joffensive.core;
  * @since 2016-05-12.
  */
 public interface Battle {
+
+    void fire();
+
+    void ceaseFire();
+
 }

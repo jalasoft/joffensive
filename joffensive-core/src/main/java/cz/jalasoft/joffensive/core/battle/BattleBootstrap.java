@@ -4,7 +4,11 @@ import cz.jalasoft.joffensive.core.Battle;
 import cz.jalasoft.joffensive.core.Platoon;
 import cz.jalasoft.joffensive.core.Weapon;
 
+import java.util.Collection;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 /**
  * @author Honza Lastovicka (lastovicka@avast.com)
@@ -12,13 +16,18 @@ import java.util.concurrent.Executor;
  */
 public final class BattleBootstrap {
 
-    public Battle initiate(Platoon platoon, Weapon weapon) {
+    private final WarriorFactory warriorFactory;
 
-        return null;
+    public BattleBootstrap() {
+        warriorFactory = new WarriorFactory();
     }
 
-    public Battle initiate(Platoon platoon, Weapon weapon, Executor executor) {
+    public Battle initiate(Platoon platoon, Weapon weapon, ExecutorService executor) {
+        Headquarters headquarters = new Headquarters();
 
-        return null;
+        Collection<Warrior> warriors = warriorFactory.produceWarriors(platoon, weapon, headquarters);
+        Collection<Future<?>> futures = warriors.stream().map(executor::submit).collect(Collectors.toList());
+
+        return new ConventionalBattle(futures, headquarters, executor);
     }
 }
