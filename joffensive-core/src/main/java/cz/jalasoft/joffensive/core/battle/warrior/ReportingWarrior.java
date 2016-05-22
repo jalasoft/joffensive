@@ -1,4 +1,4 @@
-package cz.jalasoft.joffensive.core.warrior;
+package cz.jalasoft.joffensive.core.battle.warrior;
 
 import cz.jalasoft.joffensive.core.Recoil;
 import cz.jalasoft.joffensive.core.Weapon;

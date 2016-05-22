@@ -1,7 +1,7 @@
 package cz.jalasoft.joffensive.core.battle;
 
 import cz.jalasoft.joffensive.core.Battle;
-import cz.jalasoft.joffensive.core.warrior.Warrior;
+import cz.jalasoft.joffensive.core.battle.warrior.Warrior;
 
 import java.time.Duration;
 import java.util.Collection;
