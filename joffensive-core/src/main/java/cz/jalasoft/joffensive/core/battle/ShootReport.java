@@ -1,6 +1,7 @@
 package cz.jalasoft.joffensive.core.battle;
 
 import cz.jalasoft.joffensive.core.Recoil;
+import cz.jalasoft.joffensive.core.warrior.WarriorName;
 
 /**
  * @author Honza Lastovicka (lastovicka@avast.com)

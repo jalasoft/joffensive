@@ -1,4 +1,4 @@
-package cz.jalasoft.joffensive.core.invokable;
+package cz.jalasoft.joffensive.core.weapon.invokable;
 
 import java.lang.reflect.Method;
 import java.util.Collection;

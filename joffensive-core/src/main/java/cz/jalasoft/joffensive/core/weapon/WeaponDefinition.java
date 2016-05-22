@@ -1,7 +1,7 @@
 package cz.jalasoft.joffensive.core.weapon;
 
 import cz.jalasoft.joffensive.core.Recoil;
-import cz.jalasoft.joffensive.core.invokable.Invokable;
+import cz.jalasoft.joffensive.core.weapon.invokable.Invokable;
 
 /**
  * @author Honza Lastovicka (lastovicka@avast.com)

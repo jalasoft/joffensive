@@ -1,4 +1,4 @@
-package cz.jalasoft.joffensive.core.battle;
+package cz.jalasoft.joffensive.core.warrior;
 
 import cz.jalasoft.joffensive.core.platoon.SinglePlatoon;
 
@@ -22,15 +22,15 @@ public final class WarriorName {
     private final String platoonName;
     private final int position;
 
-    String value() {
+    public String value() {
         return String.format(VALUE_PATTERN, platoonName, position);
     }
 
-    int position() {
+    public int position() {
         return position;
     }
 
-    String platoonName() {
+    public String platoonName() {
         return platoonName;
     }
 

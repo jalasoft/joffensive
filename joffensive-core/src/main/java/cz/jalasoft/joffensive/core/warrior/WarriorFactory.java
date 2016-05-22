@@ -1,9 +1,11 @@
-package cz.jalasoft.joffensive.core.battle;
+package cz.jalasoft.joffensive.core.warrior;
 
 import cz.jalasoft.joffensive.core.Platoon;
 import cz.jalasoft.joffensive.core.Weapon;
+import cz.jalasoft.joffensive.core.battle.Headquarters;
 import cz.jalasoft.joffensive.core.platoon.AbstractPlatoon;
 import cz.jalasoft.joffensive.core.platoon.SinglePlatoon;
+import cz.jalasoft.joffensive.core.platoon.Skill;
 
 import java.util.Collection;
 
@@ -14,9 +16,9 @@ import static java.util.stream.IntStream.range;
  * @author Honza Lastovicka (lastovicka@avast.com)
  * @since 2016-05-15.
  */
-final class WarriorFactory {
+public final class WarriorFactory {
 
-    Collection<Warrior> produceWarriors(Platoon platoon, Weapon weapon, Headquarters headquarters) {
+    public Collection<Warrior> produceWarriors(Platoon platoon, Weapon weapon, Headquarters headquarters) {
         if (platoon instanceof AbstractPlatoon) {
             return produceWarriors((SinglePlatoon) platoon, weapon, headquarters);
         }
@@ -27,7 +29,7 @@ final class WarriorFactory {
     private Collection<Warrior> produceWarriors(SinglePlatoon platoon, Weapon weapon, Headquarters headquarters) {
         return range(0, platoon.size())
                 .mapToObj(position -> WarriorName.from(platoon, position))
-                .map(name -> new Warrior(name, weapon, platoon.skill(), headquarters))
+                .map(name -> newWarrior(name, weapon, platoon.skill(), headquarters))
                 .collect(toList());
     }
 
@@ -37,5 +39,14 @@ final class WarriorFactory {
                .map(this::produceWarriors)
                .flatMap(Collection::stream)
                .collect(toList());
+    }
+
+    private Warrior newWarrior(WarriorName name, Weapon weapon, Skill skill, Headquarters headquarters) {
+
+        Warrior reportingWarrior = new ReportingWarrior(name, weapon, headquarters);
+        Warrior shootingWarrior = new ShootingWarrior(reportingWarrior, skill);
+        Warrior timingWarrior = new TimingWarrior(shootingWarrior, skill);
+
+        return timingWarrior;
     }
 }

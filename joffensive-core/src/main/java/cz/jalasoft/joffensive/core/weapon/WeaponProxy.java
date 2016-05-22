@@ -2,7 +2,7 @@ package cz.jalasoft.joffensive.core.weapon;
 
 import cz.jalasoft.joffensive.core.Recoil;
 import cz.jalasoft.joffensive.core.Weapon;
-import cz.jalasoft.joffensive.core.invokable.Invokable;
+import cz.jalasoft.joffensive.core.weapon.invokable.Invokable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -28,7 +28,7 @@ public class AnotherDesignTester {
 
         Weapon weapon = HttpWeapon.newWeapon().target("http://vodnisvetkolin-jalasoft.rhcloud.com:80/status").methodGet().get();
 
-        Warrior warrior = new Warrior("w1", weapon, EvenCadence.shooting().afterSeconds(2).everySecond(4).get(), 4);
+        ReportingWarrior warrior = new ReportingWarrior("w1", weapon, EvenCadence.shooting().afterSeconds(2).everySecond(4).get(), 4);
 
         Future<Void> fight = CompletableFuture.runAsync(() -> warrior.run());
 
@@ -52,7 +52,7 @@ public class AnotherDesignTester {
         Platoon platoon = g
                 .trainingCamp()
                 .ofRecruits(4)
-                .name("Bazanti")
+                .called("Bazanti")
                 .shooting(EvenCadence.evenly().everySecond(4))
                 .havingMagazinesOfSize(2)
                 .graduate();

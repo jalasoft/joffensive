@@ -8,7 +8,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import static cz.jalasoft.joffensive.core.invokable.Invokable.method;
+import static cz.jalasoft.joffensive.core.weapon.invokable.Invokable.method;
 import static java.util.Arrays.asList;
 
 /**
@@ -112,7 +112,7 @@ final class WeaponClassIntrospection implements WeaponAnnotationIntrospection {
         Shoot annotation = examinedType.annotation(Shoot.class);
         String name = annotation.value();
         if (name == null || name.isEmpty()) {
-            throw new WeaponIntrospectionException("Annotation shoot on type " + examinedType.typeName() + " should have name as its value.");
+            throw new WeaponIntrospectionException("Annotation shoot on type " + examinedType.typeName() + " should have called as its value.");
         }
     }
 

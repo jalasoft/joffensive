@@ -25,15 +25,15 @@ public final class JOffensive {
     //INSTANCE SCOPE
     //-----------------------------------------------------
 
-    private final WeaponFactory weaponFactory;
     private final WeaponRegistry weaponRegistry;
 
+    private final WeaponFactory weaponFactory;
     private final BattleBootstrap battleBootstrap;
 
     private JOffensive() {
-        this.weaponFactory = new WeaponFactory();
         this.weaponRegistry = new WeaponRegistry();
 
+        this.weaponFactory = new WeaponFactory();
         this.battleBootstrap = new BattleBootstrap();
     }
 
@@ -47,7 +47,7 @@ public final class JOffensive {
         }
 
         if (weaponRegistry.hasWeapon(name)) {
-            throw new IllegalArgumentException("Weapon with name '" + name + "' already exists.");
+            throw new IllegalArgumentException("Weapon with called '" + name + "' already exists.");
         }
 
         weaponRegistry.registerWeapon(name, weapon);
@@ -71,7 +71,7 @@ public final class JOffensive {
 
     public void registerWeaponsInPackage(String packageName) {
         if (packageName == null || packageName.isEmpty()) {
-            throw new IllegalArgumentException("Package name must not be null or empty.");
+            throw new IllegalArgumentException("Package called must not be null or empty.");
         }
         try {
             forPackage(packageName)
@@ -102,7 +102,7 @@ public final class JOffensive {
         }
 
         if (!weaponRegistry.hasWeapon(name)) {
-            new NoSuchElementException("No weapon of name '" + name + "' exists.");
+            new NoSuchElementException("No weapon of called '" + name + "' exists.");
         }
 
         return weaponRegistry.weapon(name);

@@ -3,9 +3,10 @@ package cz.jalasoft.joffensive.core.battle;
 import cz.jalasoft.joffensive.core.Battle;
 import cz.jalasoft.joffensive.core.Platoon;
 import cz.jalasoft.joffensive.core.Weapon;
+import cz.jalasoft.joffensive.core.warrior.Warrior;
+import cz.jalasoft.joffensive.core.warrior.WarriorFactory;
 
 import java.util.Collection;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
@@ -24,10 +25,8 @@ public final class BattleBootstrap {
 
     public Battle initiate(Platoon platoon, Weapon weapon, ExecutorService executor) {
         Headquarters headquarters = new Headquarters();
-
         Collection<Warrior> warriors = warriorFactory.produceWarriors(platoon, weapon, headquarters);
-        Collection<Future<?>> futures = warriors.stream().map(executor::submit).collect(Collectors.toList());
 
-        return new ConventionalBattle(futures, headquarters, executor);
+        return new ConventionalBattle(warriors, headquarters, executor);
     }
 }

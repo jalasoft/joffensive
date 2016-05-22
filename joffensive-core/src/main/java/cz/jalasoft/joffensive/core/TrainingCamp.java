@@ -58,7 +58,7 @@ public final class TrainingCamp {
         return this;
     }
 
-    public TrainingCamp name(String name) {
+    public TrainingCamp called(String name) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name of a new platoon must not be null or empty.");
         }
