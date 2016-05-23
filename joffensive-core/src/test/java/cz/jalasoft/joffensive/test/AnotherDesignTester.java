@@ -42,7 +42,7 @@ public class AnotherDesignTester {
     @Test
     public void scansWeaponAndRegistersItAndRetrievesItAndShoots() throws Exception {
 
-        JOffensive g = JOffensive.newOffensive();
+        JOffensive g = JOffensive.defaultOffensive();
         g.registerWeaponsInPackage("cz.jalasoft.joffensive");
 
         Weapon weapon = g.weapon("hovnomet");

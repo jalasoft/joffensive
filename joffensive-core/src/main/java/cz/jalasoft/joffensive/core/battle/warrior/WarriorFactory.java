@@ -44,8 +44,8 @@ public final class WarriorFactory {
     private Warrior newWarrior(WarriorName name, Weapon weapon, Skill skill, Headquarters headquarters) {
 
         Warrior reportingWarrior = new ReportingWarrior(name, weapon, headquarters);
-        Warrior shootingWarrior = new ShootingWarrior(reportingWarrior, skill);
-        Warrior timingWarrior = new TimingWarrior(shootingWarrior, skill);
+        Warrior shootingWarrior = new ShootDrivingWarriorDecorator(reportingWarrior, skill);
+        Warrior timingWarrior = new TimingWarriorDecorator(shootingWarrior, skill);
 
         return timingWarrior;
     }

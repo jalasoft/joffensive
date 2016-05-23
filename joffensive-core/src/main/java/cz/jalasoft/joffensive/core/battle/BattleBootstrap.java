@@ -1,6 +1,7 @@
 package cz.jalasoft.joffensive.core.battle;
 
 import cz.jalasoft.joffensive.core.Battle;
+import cz.jalasoft.joffensive.core.Configuration;
 import cz.jalasoft.joffensive.core.Platoon;
 import cz.jalasoft.joffensive.core.Weapon;
 import cz.jalasoft.joffensive.core.battle.warrior.Warrior;
@@ -15,10 +16,12 @@ import java.util.concurrent.ExecutorService;
  */
 public final class BattleBootstrap {
 
+    private final Configuration configuration;
     private final WarriorFactory warriorFactory;
 
-    public BattleBootstrap() {
-        warriorFactory = new WarriorFactory();
+    public BattleBootstrap(Configuration configuration) {
+        this.configuration = configuration;
+        this.warriorFactory = new WarriorFactory();
     }
 
     public Battle initiate(Platoon platoon, Weapon weapon, ExecutorService executor) {

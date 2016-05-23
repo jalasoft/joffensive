@@ -1,12 +1,15 @@
 package cz.jalasoft.joffensive.core;
 
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import cz.jalasoft.joffensive.core.battle.BattleBootstrap;
 import cz.jalasoft.joffensive.core.weapon.WeaponFactory;
 import cz.jalasoft.joffensive.core.weapon.WeaponRegistry;
 import cz.jalasoft.joffensive.core.weapon.annotation.introspection.WeaponIntrospectionException;
 
 import java.util.NoSuchElementException;
+import java.util.concurrent.TimeUnit;
 
 import static cz.jalasoft.joffensive.core.weapon.annotation.introspection.WeaponAnnotationIntrospection.forPackage;
 import static cz.jalasoft.joffensive.core.weapon.annotation.introspection.WeaponAnnotationIntrospection.forType;
@@ -17,8 +20,13 @@ import static cz.jalasoft.joffensive.core.weapon.annotation.introspection.Weapon
  */
 public final class JOffensive {
 
-    public static JOffensive newOffensive() {
-        return new JOffensive();
+    public static JOffensive defaultOffensive() {
+        return custom().get();
+    }
+
+    public static JOffensiveConfigurer custom() {
+        Config config = ConfigFactory.load();
+        return new JOffensiveConfigurer(config);
     }
 
     //-----------------------------------------------------
@@ -30,11 +38,11 @@ public final class JOffensive {
     private final WeaponFactory weaponFactory;
     private final BattleBootstrap battleBootstrap;
 
-    private JOffensive() {
+    JOffensive(Configuration configuration) {
         this.weaponRegistry = new WeaponRegistry();
 
         this.weaponFactory = new WeaponFactory();
-        this.battleBootstrap = new BattleBootstrap();
+        this.battleBootstrap = new BattleBootstrap(configuration);
     }
 
     //------------------------------------------------------------------

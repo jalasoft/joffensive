@@ -8,12 +8,12 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * @author Honza Lastovicka (lastovicka@avast.com)
  * @since 2016-05-22.
  */
-final class TimingWarrior implements Warrior {
+final class TimingWarriorDecorator implements Warrior {
 
     private final Warrior warrior;
     private final Skill skill;
 
-    public TimingWarrior(Warrior warrior, Skill skill) {
+    public TimingWarriorDecorator(Warrior warrior, Skill skill) {
         this.warrior = warrior;
         this.skill = skill;
     }
