@@ -6,9 +6,7 @@ import cz.jalasoft.joffensive.core.Weapon;
 import cz.jalasoft.joffensive.core.battle.BattleBootstrap;
 
 import java.util.Collection;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * @author Honza Lastovicka (lastovicka@avast.com)
@@ -37,13 +35,12 @@ public abstract class AbstractPlatoon implements Platoon {
 
     @Override
     public final Battle fire(Weapon weapon) {
-        ExecutorService executor = Executors.newCachedThreadPool();
-        return fire(weapon, executor);
+        return fire(weapon, null);
     }
 
     @Override
     public final Battle fire(Weapon weapon, ExecutorService executor) {
-        Battle battle = battleBootstrap.initiate(this, weapon, executor);
+        Battle battle = battleBootstrap.newBattle(this, weapon, executor);
         battle.fire();
 
         return battle;

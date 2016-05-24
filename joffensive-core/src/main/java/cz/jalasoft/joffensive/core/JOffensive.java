@@ -3,16 +3,22 @@ package cz.jalasoft.joffensive.core;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import cz.jalasoft.joffensive.core.battle.BattleBootstrap;
+import cz.jalasoft.joffensive.core.battle.ConventionalBattle;
+import cz.jalasoft.joffensive.core.battle.Headquarters;
+import cz.jalasoft.joffensive.core.battle.warrior.Warrior;
+import cz.jalasoft.joffensive.core.battle.warrior.WarriorFactory;
 import cz.jalasoft.joffensive.core.weapon.WeaponFactory;
 import cz.jalasoft.joffensive.core.weapon.WeaponRegistry;
 import cz.jalasoft.joffensive.core.weapon.annotation.introspection.WeaponIntrospectionException;
 
+import java.util.Collection;
 import java.util.NoSuchElementException;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ExecutorService;
 
 import static cz.jalasoft.joffensive.core.weapon.annotation.introspection.WeaponAnnotationIntrospection.forPackage;
 import static cz.jalasoft.joffensive.core.weapon.annotation.introspection.WeaponAnnotationIntrospection.forType;
+import static java.util.Optional.ofNullable;
+import static java.util.concurrent.Executors.newCachedThreadPool;
 
 /**
  * @author Honza Lastovicka (lastovicka@avast.com)
@@ -34,16 +40,16 @@ public final class JOffensive {
     //-----------------------------------------------------
 
     private final WeaponRegistry weaponRegistry;
-
     private final WeaponFactory weaponFactory;
-    private final BattleBootstrap battleBootstrap;
+    private final WarriorFactory warriorFactory;
 
     JOffensive(Configuration configuration) {
         this.weaponRegistry = new WeaponRegistry();
-
         this.weaponFactory = new WeaponFactory();
-        this.battleBootstrap = new BattleBootstrap(configuration);
+        this.warriorFactory = new WarriorFactory(configuration, this::newWeaponExecutor);
     }
+
+
 
     //------------------------------------------------------------------
     //WEAPON REGISTRATION
@@ -97,7 +103,28 @@ public final class JOffensive {
     //----------------------------------------------------------------------
 
     public TrainingCamp trainingCamp() {
-        return new TrainingCamp(battleBootstrap);
+        return new TrainingCamp(this::newBattle);
+    }
+
+    //----------------------------------------------------------------------
+    //CALLBACKS
+    //----------------------------------------------------------------------
+
+    private Battle newBattle(Platoon platoon, Weapon weapon, ExecutorService customExecutor) {
+        Headquarters headquarters = new Headquarters();
+        Collection<Warrior> warriors = warriorFactory.produceWarriors(platoon, weapon, headquarters);
+
+        ExecutorService executor = ofNullable(customExecutor).orElseGet(this::newBattleExecutor);
+
+        return new ConventionalBattle(warriors, headquarters, executor);
+    }
+
+    private ExecutorService newBattleExecutor() {
+        return newCachedThreadPool();
+    }
+
+    private ExecutorService newWeaponExecutor() {
+        return newCachedThreadPool();
     }
 
     //-----------------------------------------------------------------------

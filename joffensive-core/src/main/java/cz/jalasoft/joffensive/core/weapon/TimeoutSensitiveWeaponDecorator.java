@@ -3,6 +3,7 @@ package cz.jalasoft.joffensive.core.weapon;
 import cz.jalasoft.joffensive.core.Recoil;
 import cz.jalasoft.joffensive.core.Weapon;
 
+import java.time.Duration;
 import java.util.concurrent.*;
 import java.util.function.Supplier;
 
@@ -13,12 +14,12 @@ import java.util.function.Supplier;
 public final class TimeoutSensitiveWeaponDecorator implements Weapon {
 
     private final Weapon weapon;
-    private final long timeoutMillis;
+    private final Duration timeout;
     private final Executor executor;
 
-    public TimeoutSensitiveWeaponDecorator(Weapon weapon, long timeoutMillis, Executor executor) {
+    public TimeoutSensitiveWeaponDecorator(Weapon weapon, Duration timeout, Executor executor) {
         this.weapon = weapon;
-        this.timeoutMillis = timeoutMillis;
+        this.timeout = timeout;
         this.executor = executor;
     }
 
@@ -27,7 +28,7 @@ public final class TimeoutSensitiveWeaponDecorator implements Weapon {
 
         Future<Recoil> future = CompletableFuture.supplyAsync(supplier(), executor);
         try {
-            Recoil result = future.get(timeoutMillis, TimeUnit.MILLISECONDS);
+            Recoil result = future.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
             return result;
         } catch (ExecutionException exc) {
             Throwable cause = exc.getCause();

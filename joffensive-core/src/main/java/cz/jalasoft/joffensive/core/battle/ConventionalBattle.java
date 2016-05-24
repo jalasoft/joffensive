@@ -21,7 +21,7 @@ public final class ConventionalBattle implements Battle {
 
     private Collection<Future<Void>> fightingWarriors;
 
-    ConventionalBattle(Collection<Warrior> warriors, Headquarters headquarters, ExecutorService executor) {
+    public ConventionalBattle(Collection<Warrior> warriors, Headquarters headquarters, ExecutorService executor) {
         this.warriors = warriors;
         this.headquarters = headquarters;
         this.executor = executor;

@@ -1,13 +1,17 @@
 package cz.jalasoft.joffensive.core.battle.warrior;
 
+import cz.jalasoft.joffensive.core.Configuration;
 import cz.jalasoft.joffensive.core.Platoon;
 import cz.jalasoft.joffensive.core.Weapon;
 import cz.jalasoft.joffensive.core.battle.Headquarters;
 import cz.jalasoft.joffensive.core.platoon.AbstractPlatoon;
 import cz.jalasoft.joffensive.core.platoon.SinglePlatoon;
 import cz.jalasoft.joffensive.core.platoon.Skill;
+import cz.jalasoft.joffensive.core.weapon.TimeoutSensitiveWeaponDecorator;
 
 import java.util.Collection;
+import java.util.concurrent.ExecutorService;
+import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
@@ -18,15 +22,23 @@ import static java.util.stream.IntStream.range;
  */
 public final class WarriorFactory {
 
+    private final Configuration config;
+    private final Supplier<ExecutorService> weaponExecutorSupplier;
+
+    public WarriorFactory(Configuration config, Supplier<ExecutorService> weaponExecutorSupplier) {
+        this.config = config;
+        this.weaponExecutorSupplier = weaponExecutorSupplier;
+    }
+
     public Collection<Warrior> produceWarriors(Platoon platoon, Weapon weapon, Headquarters headquarters) {
         if (platoon instanceof AbstractPlatoon) {
-            return produceWarriors((SinglePlatoon) platoon, weapon, headquarters);
+            return produceWarriors((SinglePlatoon) platoon, weapon, config, headquarters);
         }
 
         throw new IllegalArgumentException("Platoon is on of expectected type: " + platoon.getClass().getName());
     }
 
-    private Collection<Warrior> produceWarriors(SinglePlatoon platoon, Weapon weapon, Headquarters headquarters) {
+    private Collection<Warrior> produceWarriors(SinglePlatoon platoon, Weapon weapon, Configuration config, Headquarters headquarters) {
         return range(0, platoon.size())
                 .mapToObj(position -> WarriorName.from(platoon, position))
                 .map(name -> newWarrior(name, weapon, platoon.skill(), headquarters))
@@ -43,7 +55,10 @@ public final class WarriorFactory {
 
     private Warrior newWarrior(WarriorName name, Weapon weapon, Skill skill, Headquarters headquarters) {
 
-        Warrior reportingWarrior = new ReportingWarrior(name, weapon, headquarters);
+        ExecutorService weaponExecutor = weaponExecutorSupplier.get();
+
+        Weapon timeoutSensitiveWeapon = new TimeoutSensitiveWeaponDecorator(weapon, config.shootTimeoutValue(), weaponExecutor);
+        Warrior reportingWarrior = new ReportingWarrior(name, timeoutSensitiveWeapon, headquarters);
         Warrior shootingWarrior = new ShootDrivingWarriorDecorator(reportingWarrior, skill);
         Warrior timingWarrior = new TimingWarriorDecorator(shootingWarrior, skill);
 

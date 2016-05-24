@@ -10,7 +10,7 @@ public final class Headquarters {
 
     private volatile CountDownLatch startingLatch;
 
-    Headquarters() {
+    public Headquarters() {
         this.startingLatch = new CountDownLatch(1);
     }
 

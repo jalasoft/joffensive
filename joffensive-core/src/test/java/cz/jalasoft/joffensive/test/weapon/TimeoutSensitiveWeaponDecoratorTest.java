@@ -5,6 +5,7 @@ import cz.jalasoft.joffensive.core.weapon.TimeoutSensitiveWeaponDecorator;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
@@ -27,21 +28,21 @@ public class TimeoutSensitiveWeaponDecoratorTest {
     @Test(expectedExceptions = TimeoutException.class)
     public void weaponSleepingTooLongThrowsTimeoutException() throws Exception {
 
-        Weapon w  = new TimeoutSensitiveWeaponDecorator(sleepingWeapon(2000), 1000, executor);
+        Weapon w  = new TimeoutSensitiveWeaponDecorator(sleepingWeapon(2000), Duration.ofSeconds(1), executor);
         w.shoot();
     }
 
     @Test
     public void weaponSleepingNotTooLongDoesNotThrowTimeoutException() throws Exception {
 
-        Weapon w = new TimeoutSensitiveWeaponDecorator(sleepingWeapon(2000), 3000, executor);
+        Weapon w = new TimeoutSensitiveWeaponDecorator(sleepingWeapon(2000), Duration.ofMillis(3000), executor);
         w.shoot();
     }
 
     @Test(expectedExceptions = MyException.class)
     public void weaponThrowingExceptionPropagatesTheExceptionUpTheCallStack() throws Exception {
 
-        Weapon w = new TimeoutSensitiveWeaponDecorator(throwing(() -> new MyException()), 3000, executor);
+        Weapon w = new TimeoutSensitiveWeaponDecorator(throwing(() -> new MyException()), Duration.ofSeconds(3000), executor);
         w.shoot();
     }
 
