@@ -14,12 +14,8 @@ public final class Headquarters {
         this.startingLatch = new CountDownLatch(1);
     }
 
-    void fire() {
-        startingLatch.countDown();
-    }
-
-    void warriorReadyForFight() throws InterruptedException {
-        startingLatch.await();
+    public CountDownLatch startingLatch() {
+        return startingLatch;
     }
 
     void warriorReportShoot(ShootReport report) {

@@ -57,6 +57,7 @@ public class AnotherDesignTester {
                 .havingMagazinesOfSize(2)
                 .graduate();
 
+        TimeUnit.SECONDS.sleep(3);
 
         Battle battle = platoon.fire(weapon);
 

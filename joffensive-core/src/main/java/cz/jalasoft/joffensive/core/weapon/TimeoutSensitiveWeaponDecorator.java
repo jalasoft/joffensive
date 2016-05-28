@@ -17,10 +17,10 @@ public final class TimeoutSensitiveWeaponDecorator implements Weapon {
     private final Duration timeout;
     private final Executor executor;
 
-    public TimeoutSensitiveWeaponDecorator(Weapon weapon, Duration timeout, Executor executor) {
+    public TimeoutSensitiveWeaponDecorator(Weapon weapon, Duration timeout) {
         this.weapon = weapon;
         this.timeout = timeout;
-        this.executor = executor;
+        this.executor = Executors.newSingleThreadExecutor();
     }
 
     @Override

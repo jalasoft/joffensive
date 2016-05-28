@@ -18,31 +18,24 @@ import java.util.function.Supplier;
  */
 public class TimeoutSensitiveWeaponDecoratorTest {
 
-    private Executor executor;
-
-    @BeforeTest
-    public void init() {
-        executor = ForkJoinPool.commonPool();
-    }
-
     @Test(expectedExceptions = TimeoutException.class)
     public void weaponSleepingTooLongThrowsTimeoutException() throws Exception {
 
-        Weapon w  = new TimeoutSensitiveWeaponDecorator(sleepingWeapon(2000), Duration.ofSeconds(1), executor);
+        Weapon w  = new TimeoutSensitiveWeaponDecorator(sleepingWeapon(2000), Duration.ofSeconds(1));
         w.shoot();
     }
 
     @Test
     public void weaponSleepingNotTooLongDoesNotThrowTimeoutException() throws Exception {
 
-        Weapon w = new TimeoutSensitiveWeaponDecorator(sleepingWeapon(2000), Duration.ofMillis(3000), executor);
+        Weapon w = new TimeoutSensitiveWeaponDecorator(sleepingWeapon(2000), Duration.ofMillis(3000));
         w.shoot();
     }
 
     @Test(expectedExceptions = MyException.class)
     public void weaponThrowingExceptionPropagatesTheExceptionUpTheCallStack() throws Exception {
 
-        Weapon w = new TimeoutSensitiveWeaponDecorator(throwing(() -> new MyException()), Duration.ofSeconds(3000), executor);
+        Weapon w = new TimeoutSensitiveWeaponDecorator(throwing(() -> new MyException()), Duration.ofSeconds(3000));
         w.shoot();
     }
 

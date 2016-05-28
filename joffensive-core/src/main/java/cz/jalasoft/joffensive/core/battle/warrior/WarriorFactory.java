@@ -10,8 +10,6 @@ import cz.jalasoft.joffensive.core.platoon.Skill;
 import cz.jalasoft.joffensive.core.weapon.TimeoutSensitiveWeaponDecorator;
 
 import java.util.Collection;
-import java.util.concurrent.ExecutorService;
-import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
@@ -23,11 +21,9 @@ import static java.util.stream.IntStream.range;
 public final class WarriorFactory {
 
     private final Configuration config;
-    private final Supplier<ExecutorService> weaponExecutorSupplier;
 
-    public WarriorFactory(Configuration config, Supplier<ExecutorService> weaponExecutorSupplier) {
+    public WarriorFactory(Configuration config) {
         this.config = config;
-        this.weaponExecutorSupplier = weaponExecutorSupplier;
     }
 
     public Collection<Warrior> produceWarriors(Platoon platoon, Weapon weapon, Headquarters headquarters) {
@@ -35,7 +31,7 @@ public final class WarriorFactory {
             return produceWarriors((SinglePlatoon) platoon, weapon, config, headquarters);
         }
 
-        throw new IllegalArgumentException("Platoon is on of expectected type: " + platoon.getClass().getName());
+        throw new IllegalArgumentException("Platoon is of an unexpected type: " + platoon.getClass().getName());
     }
 
     private Collection<Warrior> produceWarriors(SinglePlatoon platoon, Weapon weapon, Configuration config, Headquarters headquarters) {
@@ -55,13 +51,12 @@ public final class WarriorFactory {
 
     private Warrior newWarrior(WarriorName name, Weapon weapon, Skill skill, Headquarters headquarters) {
 
-        ExecutorService weaponExecutor = weaponExecutorSupplier.get();
-
-        Weapon timeoutSensitiveWeapon = new TimeoutSensitiveWeaponDecorator(weapon, config.shootTimeoutValue(), weaponExecutor);
+        Weapon timeoutSensitiveWeapon = new TimeoutSensitiveWeaponDecorator(weapon, config.shootTimeoutValue());
         Warrior reportingWarrior = new ReportingWarrior(name, timeoutSensitiveWeapon, headquarters);
         Warrior shootingWarrior = new ShootDrivingWarriorDecorator(reportingWarrior, skill);
         Warrior timingWarrior = new TimingWarriorDecorator(shootingWarrior, skill);
+        Warrior startingWarrior = new StartingWarriorDecorator(timingWarrior, headquarters.startingLatch());
 
-        return timingWarrior;
+        return startingWarrior;
     }
 }

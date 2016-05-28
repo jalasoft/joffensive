@@ -46,10 +46,8 @@ public final class JOffensive {
     JOffensive(Configuration configuration) {
         this.weaponRegistry = new WeaponRegistry();
         this.weaponFactory = new WeaponFactory();
-        this.warriorFactory = new WarriorFactory(configuration, this::newWeaponExecutor);
+        this.warriorFactory = new WarriorFactory(configuration);
     }
-
-
 
     //------------------------------------------------------------------
     //WEAPON REGISTRATION
@@ -120,10 +118,6 @@ public final class JOffensive {
     }
 
     private ExecutorService newBattleExecutor() {
-        return newCachedThreadPool();
-    }
-
-    private ExecutorService newWeaponExecutor() {
         return newCachedThreadPool();
     }
 

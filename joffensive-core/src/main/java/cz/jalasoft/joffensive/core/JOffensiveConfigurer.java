@@ -13,10 +13,12 @@ public final class JOffensiveConfigurer {
 
     private Config externalConfig;
 
-    Duration shootTimeout = Duration.ofMillis(externalConfig.getLong("joffensive.shoot.timeout_millis"));
+    Duration shootTimeout;
 
     JOffensiveConfigurer(Config externalConfig) {
         this.externalConfig = externalConfig;
+
+        this.shootTimeout = Duration.ofMillis(externalConfig.getLong("joffensive.shoot.timeout_millis"));
     }
 
     public JOffensiveConfigurer shootTimeout(long value, TimeUnit unit) {

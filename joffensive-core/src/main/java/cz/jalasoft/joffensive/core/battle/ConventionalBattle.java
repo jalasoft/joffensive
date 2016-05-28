@@ -7,7 +7,8 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+
+import static java.util.stream.Collectors.*;
 
 /**
  * @author Honza Lastovicka (lastovicka@avast.com)
@@ -29,18 +30,23 @@ public final class ConventionalBattle implements Battle {
 
     @Override
     public void fire() {
-        //TODO check status
-        try {
-            fightingWarriors = executor.invokeAll(warriors, 0l, TimeUnit.MILLISECONDS);
-            headquarters.fire();
-        } catch (InterruptedException exc) {
-            throw new RuntimeException("Ja nevim co s tim....");
+        if (fightingWarriors != null) {
+            throw new IllegalStateException("There are already some warriors fighting. First invoke ceaseFire()");
         }
+
+        fightingWarriors = warriors.stream()
+                .map(executor::submit)
+                .collect(toList());
+
+        headquarters.startingLatch().countDown();
     }
 
     @Override
     public void ceaseFire() {
-        //TODO check status
+        if (fightingWarriors == null) {
+            throw new IllegalStateException("There are no warriors currently fighting.");
+        }
+
         fightingWarriors.stream().forEach(f -> f.cancel(true));
         fightingWarriors = null;
     }

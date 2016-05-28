@@ -27,7 +27,6 @@ final class ShootDrivingWarriorDecorator implements Warrior {
 
     @Override
     public void fight() {
-
         try {
             shootMagazineInteruptibly();
         } catch (InterruptedException exc) {
@@ -37,16 +36,22 @@ final class ShootDrivingWarriorDecorator implements Warrior {
 
     private void shootMagazineInteruptibly() throws InterruptedException {
         for(int i=0; i<skill.magazineSize(); i++) {
+            interruptIfRequested();
             shootBulletInterruptibly();
         }
     }
 
-    private void shootBulletInterruptibly() throws InterruptedException {
+    private void interruptIfRequested() throws InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
+            LOGGER.debug("Interruption requested for warrion {}", warrior.name());
+
+            //reset the status
             Thread.interrupted();
             throw new InterruptedException();
         }
+    }
 
+    private void shootBulletInterruptibly() {
         warrior.fight();
     }
 }
