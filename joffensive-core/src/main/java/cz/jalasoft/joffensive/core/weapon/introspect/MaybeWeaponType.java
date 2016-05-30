@@ -1,4 +1,4 @@
-package cz.jalasoft.joffensive.core.weapon.annotation.introspection;
+package cz.jalasoft.joffensive.core.weapon.introspect;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;

@@ -1,13 +1,13 @@
-package cz.jalasoft.joffensive.core.weapon;
+package cz.jalasoft.joffensive.core.weapon.proxy;
 
 import cz.jalasoft.joffensive.core.Recoil;
-import cz.jalasoft.joffensive.core.weapon.invokable.Invokable;
+import cz.jalasoft.joffensive.core.weapon.proxy.invokable.Invokable;
 
 /**
  * @author Honza Lastovicka (lastovicka@avast.com)
  * @since 2016-05-02.
  */
-public final class WeaponDefinition {
+public final class WeaponType {
 
     public static Builder newDefinition() {
         return new Builder();
@@ -26,7 +26,7 @@ public final class WeaponDefinition {
     private final Invokable<Void> afterShootInvokable;
     private final Invokable<Void> afterWeaponInvokable;
 
-    private WeaponDefinition(Builder builder) {
+    private WeaponType(Builder builder) {
         this.name = builder.name;
         this.type = builder.type;
         this.beforeWeaponInvokable = builder.beforeWeaponInvokable;
@@ -132,9 +132,9 @@ public final class WeaponDefinition {
             return this;
         }
 
-        public WeaponDefinition get() {
+        public WeaponType get() {
             assertState();
-            return new WeaponDefinition(this);
+            return new WeaponType(this);
         }
 
         private void assertState() {

@@ -6,6 +6,10 @@ package cz.jalasoft.joffensive.core;
  */
 public interface Weapon {
 
+    default String name() {
+        return "Weapon[" + getClass().getName() + "]";
+    }
+
     default void beforeWeapon() throws Exception {}
 
     default void beforeShoot() throws Exception {}

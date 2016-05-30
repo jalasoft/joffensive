@@ -9,14 +9,16 @@ import cz.jalasoft.joffensive.core.battle.warrior.Warrior;
 import cz.jalasoft.joffensive.core.battle.warrior.WarriorFactory;
 import cz.jalasoft.joffensive.core.weapon.WeaponFactory;
 import cz.jalasoft.joffensive.core.weapon.WeaponRegistry;
-import cz.jalasoft.joffensive.core.weapon.annotation.introspection.WeaponIntrospectionException;
+import cz.jalasoft.joffensive.core.weapon.introspect.WeaponIntrospectionException;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
 
-import static cz.jalasoft.joffensive.core.weapon.annotation.introspection.WeaponAnnotationIntrospection.forPackage;
-import static cz.jalasoft.joffensive.core.weapon.annotation.introspection.WeaponAnnotationIntrospection.forType;
+import static cz.jalasoft.joffensive.core.weapon.introspect.WeaponAnnotationIntrospection.forPackage;
+import static cz.jalasoft.joffensive.core.weapon.introspect.WeaponAnnotationIntrospection.forType;
 import static java.util.Optional.ofNullable;
 import static java.util.concurrent.Executors.newCachedThreadPool;
 
@@ -24,7 +26,7 @@ import static java.util.concurrent.Executors.newCachedThreadPool;
  * @author Honza Lastovicka (lastovicka@avast.com)
  * @since 2016-04-12.
  */
-public final class JOffensive {
+public final class JOffensive implements Closeable {
 
     public static JOffensive defaultOffensive() {
         return custom().get();
@@ -135,5 +137,10 @@ public final class JOffensive {
         }
 
         return weaponRegistry.weapon(name);
+    }
+
+    @Override
+    public void close() throws IOException {
+
     }
 }

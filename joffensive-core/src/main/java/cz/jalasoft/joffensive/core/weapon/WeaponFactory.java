@@ -1,17 +1,22 @@
 package cz.jalasoft.joffensive.core.weapon;
 
+import cz.jalasoft.joffensive.core.weapon.proxy.WeaponProxy;
+import cz.jalasoft.joffensive.core.weapon.proxy.WeaponType;
+
 /**
  * @author Honza Lastovicka (lastovicka@avast.com)
  * @since 2016-05-07.
  */
 public final class WeaponFactory {
 
-    public WeaponProxy newWeapon(WeaponDefinition definition) {
+    public WeaponProxy newWeapon(WeaponType definition) {
         Object target = instantiateTarget(definition);
-        return new WeaponProxy(definition, target);
+        WeaponProxy weapon = new WeaponProxy(definition, target);
+
+        return weapon;
     }
 
-    private Object instantiateTarget(WeaponDefinition definition) {
+    private Object instantiateTarget(WeaponType definition) {
         try {
             Object target = definition.type().newInstance();
             return target;

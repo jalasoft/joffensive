@@ -1,4 +1,4 @@
-package cz.jalasoft.joffensive.core.weapon.invokable;
+package cz.jalasoft.joffensive.core.weapon.proxy.invokable;
 
 import java.util.Collection;
 

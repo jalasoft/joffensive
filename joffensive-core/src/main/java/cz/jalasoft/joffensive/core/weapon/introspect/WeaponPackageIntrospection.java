@@ -1,6 +1,6 @@
-package cz.jalasoft.joffensive.core.weapon.annotation.introspection;
+package cz.jalasoft.joffensive.core.weapon.introspect;
 
-import cz.jalasoft.joffensive.core.weapon.WeaponDefinition;
+import cz.jalasoft.joffensive.core.weapon.proxy.WeaponType;
 import cz.jalasoft.joffensive.core.weapon.annotation.Shoot;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
@@ -37,15 +37,15 @@ final class WeaponPackageIntrospection implements WeaponAnnotationIntrospection 
     }
 
     @Override
-    public Collection<WeaponDefinition> introspect() throws WeaponIntrospectionException {
+    public Collection<WeaponType> introspect() throws WeaponIntrospectionException {
         Set<Method> methods = reflections.getMethodsAnnotatedWith(Shoot.class);
         Collection<Class<?>> types = declaringTypesOf(methods);
 
-        Collection<WeaponDefinition> result = new ArrayList<>();
+        Collection<WeaponType> result = new ArrayList<>();
 
         for(Class<?> type : types) {
-            WeaponAnnotationIntrospection introspection = WeaponAnnotationIntrospection.forType(type);
-            Collection<WeaponDefinition> definitions = introspection.introspect();
+            WeaponAnnotationIntrospection introspection = forType(type);
+            Collection<WeaponType> definitions = introspection.introspect();
 
             result.addAll(definitions);
         }

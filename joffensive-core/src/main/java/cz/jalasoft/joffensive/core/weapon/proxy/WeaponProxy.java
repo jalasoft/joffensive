@@ -1,8 +1,8 @@
-package cz.jalasoft.joffensive.core.weapon;
+package cz.jalasoft.joffensive.core.weapon.proxy;
 
 import cz.jalasoft.joffensive.core.Recoil;
 import cz.jalasoft.joffensive.core.Weapon;
-import cz.jalasoft.joffensive.core.weapon.invokable.Invokable;
+import cz.jalasoft.joffensive.core.weapon.proxy.invokable.Invokable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,37 +16,37 @@ public final class WeaponProxy implements Weapon {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WeaponProxy.class);
 
-    private final WeaponDefinition definition;
+    private final WeaponType weaponType;
     private final Object target;
 
-    WeaponProxy(WeaponDefinition definition, Object target) {
-        this.definition = definition;
+    public WeaponProxy(WeaponType type, Object target) {
+        this.weaponType = type;
         this.target = target;
     }
 
     @Override
     public void beforeWeapon() throws Exception {
-        invokeSafely(definition.beforeWeapon());
+        invokeSafely(weaponType.beforeWeapon());
     }
 
     @Override
     public void beforeShoot() throws Exception {
-        invokeSafely(definition.beforeShoot());
+        invokeSafely(weaponType.beforeShoot());
     }
 
     @Override
     public Recoil shoot() throws Exception {
-        return invokeSafely(definition.shoot());
+        return invokeSafely(weaponType.shoot());
     }
 
     @Override
     public void afterShoot() throws Exception {
-        invokeSafely(definition.afterShoot());
+        invokeSafely(weaponType.afterShoot());
     }
 
     @Override
     public void afterWeapon() throws Exception {
-        invokeSafely(definition.afterWeapon());
+        invokeSafely(weaponType.afterWeapon());
     }
 
     private <T> T invokeSafely(Invokable<T> invokable) throws Exception {
@@ -66,6 +66,6 @@ public final class WeaponProxy implements Weapon {
     }
 
     public String name() {
-        return definition.name();
+        return weaponType.name();
     }
 }

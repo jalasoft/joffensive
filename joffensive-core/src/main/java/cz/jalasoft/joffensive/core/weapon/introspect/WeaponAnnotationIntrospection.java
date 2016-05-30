@@ -1,7 +1,7 @@
-package cz.jalasoft.joffensive.core.weapon.annotation.introspection;
+package cz.jalasoft.joffensive.core.weapon.introspect;
 
 
-import cz.jalasoft.joffensive.core.weapon.WeaponDefinition;
+import cz.jalasoft.joffensive.core.weapon.proxy.WeaponType;
 
 import java.util.Collection;
 
@@ -19,5 +19,5 @@ public interface WeaponAnnotationIntrospection {
         return new WeaponPackageIntrospection(packageName);
     }
 
-    Collection<WeaponDefinition> introspect() throws WeaponIntrospectionException;
+    Collection<WeaponType> introspect() throws WeaponIntrospectionException;
 }

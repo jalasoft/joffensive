@@ -1,14 +1,14 @@
-package cz.jalasoft.joffensive.core.weapon.annotation.introspection;
+package cz.jalasoft.joffensive.core.weapon.introspect;
 
 import cz.jalasoft.joffensive.core.Recoil;
-import cz.jalasoft.joffensive.core.weapon.WeaponDefinition;
+import cz.jalasoft.joffensive.core.weapon.proxy.WeaponType;
 import cz.jalasoft.joffensive.core.weapon.annotation.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import static cz.jalasoft.joffensive.core.weapon.invokable.Invokable.method;
+import static cz.jalasoft.joffensive.core.weapon.proxy.invokable.Invokable.method;
 import static java.util.Arrays.asList;
 
 /**
@@ -24,7 +24,7 @@ final class WeaponClassIntrospection implements WeaponAnnotationIntrospection {
     }
 
     @Override
-    public Collection<WeaponDefinition> introspect() throws WeaponIntrospectionException {
+    public Collection<WeaponType> introspect() throws WeaponIntrospectionException {
 
         validateParameterlessConstructor();
 
@@ -34,7 +34,7 @@ final class WeaponClassIntrospection implements WeaponAnnotationIntrospection {
         validateLifecycleMethod(AfterShoot.class);
         validateLifecycleMethod(AfterWeapon.class);
 
-        WeaponDefinition.Builder builder = WeaponDefinition.newDefinition()
+        WeaponType.Builder builder = WeaponType.newDefinition()
                 .on(examinedType.type())
                 .called(examinedType.annotation(Shoot.class).value());
 

@@ -1,4 +1,4 @@
-package cz.jalasoft.joffensive.core.weapon.invokable;
+package cz.jalasoft.joffensive.core.weapon.proxy.invokable;
 
 /**
  * @author Honza Lastovicka (lastovicka@avast.com)

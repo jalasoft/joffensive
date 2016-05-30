@@ -16,9 +16,9 @@ public final class WeaponRegistry {
         this.weapons = new HashMap<>();
     }
 
-    public void registerWeapon(String name, Weapon weapon) {
-        if (weapons.containsKey(name)) {
-            throw new IllegalArgumentException("Weapon called '" + name + "' already exists.");
+    public void registerWeapon(Weapon weapon) {
+        if (weapons.containsKey(weapon.name())) {
+            throw new IllegalArgumentException("Weapon called '" + weapon.name() + "' is already registered.");
         }
 
         weapons.put(name, weapon);
