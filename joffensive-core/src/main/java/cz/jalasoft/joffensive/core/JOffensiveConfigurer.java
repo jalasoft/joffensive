@@ -7,6 +7,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author Honza Lastovicka (lastovicka@avast.com)
@@ -50,6 +51,18 @@ public final class JOffensiveConfigurer {
 
     public JOffensive get() {
         Configuration config = new Configuration(this);
-        return new JOffensive(config);
+        Collection<Weapon> weapons = createWeapons();
+
+        return new JOffensive(config, weapons);
+    }
+
+    private Collection<Weapon> createWeapons() {
+        //TODO zkontroluj duplikatni nazvy
+
+        return definitions
+                .stream()
+                .map(WeaponDefinition::create)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 }

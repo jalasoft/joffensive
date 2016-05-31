@@ -44,7 +44,7 @@ final class WeaponPackageIntrospection implements WeaponAnnotationIntrospection 
         Collection<WeaponType> result = new ArrayList<>();
 
         for(Class<?> type : types) {
-            WeaponAnnotationIntrospection introspection = forType(type);
+            WeaponAnnotationIntrospection introspection = WeaponAnnotationIntrospection.forType(type);
             Collection<WeaponType> definitions = introspection.introspect();
 
             result.addAll(definitions);

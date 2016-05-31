@@ -9,7 +9,6 @@ import cz.jalasoft.joffensive.core.battle.warrior.Warrior;
 import cz.jalasoft.joffensive.core.battle.warrior.WarriorFactory;
 import cz.jalasoft.joffensive.core.weapon.WeaponFactory;
 import cz.jalasoft.joffensive.core.weapon.WeaponRegistry;
-import cz.jalasoft.joffensive.core.weapon.introspect.WeaponIntrospectionException;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -17,8 +16,6 @@ import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
 
-import static cz.jalasoft.joffensive.core.weapon.introspect.WeaponAnnotationIntrospection.forPackage;
-import static cz.jalasoft.joffensive.core.weapon.introspect.WeaponAnnotationIntrospection.forType;
 import static java.util.Optional.ofNullable;
 import static java.util.concurrent.Executors.newCachedThreadPool;
 
@@ -28,11 +25,7 @@ import static java.util.concurrent.Executors.newCachedThreadPool;
  */
 public final class JOffensive implements Closeable {
 
-    public static JOffensive defaultOffensive() {
-        return custom().get();
-    }
-
-    public static JOffensiveConfigurer custom() {
+    public static JOffensiveConfigurer newOffensive() {
         Config config = ConfigFactory.load();
         return new JOffensiveConfigurer(config);
     }
@@ -45,58 +38,12 @@ public final class JOffensive implements Closeable {
     private final WeaponFactory weaponFactory;
     private final WarriorFactory warriorFactory;
 
-    JOffensive(Configuration configuration) {
-        this.weaponRegistry = new WeaponRegistry();
+    JOffensive(Configuration configuration, Collection<Weapon> weapons) {
+        this.weaponRegistry = new WeaponRegistry(weapons);
         this.weaponFactory = new WeaponFactory();
         this.warriorFactory = new WarriorFactory(configuration);
     }
 
-    //------------------------------------------------------------------
-    //WEAPON REGISTRATION
-    //------------------------------------------------------------------
-
-    public void registerWeapon(String name, Weapon weapon) {
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Name of weapon must not be null or empty.");
-        }
-
-        if (weaponRegistry.hasWeapon(name)) {
-            throw new IllegalArgumentException("Weapon with called '" + name + "' already exists.");
-        }
-
-        weaponRegistry.registerWeapon(name, weapon);
-    }
-
-    public void registerWeaponByType(Class<?> type) {
-        if (type == null) {
-            throw new IllegalArgumentException("Class must not be null.");
-        }
-
-        try {
-            forType(type)
-                    .introspect()
-                    .stream()
-                    .map(weaponFactory::newWeapon)
-                    .forEach(w -> weaponRegistry.registerWeapon(w.name(), w));
-        } catch (WeaponIntrospectionException exc) {
-            throw new RuntimeException(exc);
-        }
-    }
-
-    public void registerWeaponsInPackage(String packageName) {
-        if (packageName == null || packageName.isEmpty()) {
-            throw new IllegalArgumentException("Package called must not be null or empty.");
-        }
-        try {
-            forPackage(packageName)
-                    .introspect()
-                    .stream()
-                    .map(weaponFactory::newWeapon)
-                    .forEach(w -> weaponRegistry.registerWeapon(w.name(), w));
-        } catch (WeaponIntrospectionException exc) {
-            throw new RuntimeException(exc);
-        }
-    }
 
     //----------------------------------------------------------------------
     //CAMP

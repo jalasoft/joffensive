@@ -16,7 +16,7 @@ public class AnotherDesignTester {
     @Test
     public void weaponShootsOneBullet() {
 
-        Weapon weapon = HttpWeapon.newWeapon().methodGet().target("http://vodnisvetkolin-jalasoft.rhcloud.com:80/status").get();
+        Weapon weapon = HttpWeapon.newWeapon().methodGet().target("http://vodnisvetkolin-jalasoft.rhcloud.com:80/status").finalize();
 
         Recoil result = weapon.shoot();
 
@@ -26,9 +26,9 @@ public class AnotherDesignTester {
     @Test
     public void warriorShoots() throws IOException, InterruptedException {
 
-        Weapon weapon = HttpWeapon.newWeapon().target("http://vodnisvetkolin-jalasoft.rhcloud.com:80/status").methodGet().get();
+        Weapon weapon = HttpWeapon.newWeapon().target("http://vodnisvetkolin-jalasoft.rhcloud.com:80/status").methodGet().finalize();
 
-        ReportingWarrior warrior = new ReportingWarrior("w1", weapon, EvenCadence.shooting().afterSeconds(2).everySecond(4).get(), 4);
+        ReportingWarrior warrior = new ReportingWarrior("w1", weapon, EvenCadence.shooting().afterSeconds(2).everySecond(4).finalize(), 4);
 
         Future<Void> fight = CompletableFuture.runAsync(() -> warrior.run());
 
@@ -42,8 +42,10 @@ public class AnotherDesignTester {
     @Test
     public void scansWeaponAndRegistersItAndRetrievesItAndShoots() throws Exception {
 
-        JOffensive g = JOffensive.defaultOffensive();
-        g.registerWeaponsInPackage("cz.jalasoft.joffensive");
+        JOffensive g = JOffensive.newOffensive()
+                .shootTimeout(3, TimeUnit.SECONDS)
+                .scanAnnotatedWeaponClasses("cz.jalasoft.joffensive")
+                .get();
 
         Weapon weapon = g.weapon("hovnomet");
 
@@ -73,7 +75,7 @@ public class AnotherDesignTester {
 
         Platoon platoon = o.trainingCamp()
                 .ofRecruits(5)
-                .cadence(EvenCadence.shooting().everySecond(3).get())
+                .cadence(EvenCadence.shooting().everySecond(3).finalize())
                 .withBullets(20)
                 .reGroup();
 
