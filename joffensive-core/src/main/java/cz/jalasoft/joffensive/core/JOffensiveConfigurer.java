@@ -49,11 +49,14 @@ public final class JOffensiveConfigurer {
         return this;
     }
 
-    public JOffensive get() {
+    public JOffensive get() throws WeaponsException {
         Configuration config = new Configuration(this);
         Collection<Weapon> weapons = createWeapons();
 
-        return new JOffensive(config, weapons);
+        JOffensive result = new JOffensive(config, weapons);
+        result.beforeWeapons();
+
+        return result;
     }
 
     private Collection<Weapon> createWeapons() {

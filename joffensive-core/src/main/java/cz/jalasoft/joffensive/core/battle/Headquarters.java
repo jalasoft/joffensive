@@ -1,5 +1,7 @@
 package cz.jalasoft.joffensive.core.battle;
 
+import cz.jalasoft.joffensive.core.battle.report.ShootReport;
+
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -18,7 +20,7 @@ public final class Headquarters {
         return startingLatch;
     }
 
-    void warriorReportShoot(ShootReport report) {
+    public void warriorReportShoot(ShootReport report) {
 
     }
 }

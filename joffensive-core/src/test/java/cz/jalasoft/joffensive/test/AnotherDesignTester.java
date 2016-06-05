@@ -28,7 +28,7 @@ public class AnotherDesignTester {
 
         Weapon weapon = HttpWeapon.newWeapon().target("http://vodnisvetkolin-jalasoft.rhcloud.com:80/status").methodGet().finalize();
 
-        ReportingWarrior warrior = new ReportingWarrior("w1", weapon, EvenCadence.shooting().afterSeconds(2).everySecond(4).finalize(), 4);
+        ShootingAndReportingWarrior warrior = new ShootingAndReportingWarrior("w1", weapon, EvenCadence.shooting().afterSeconds(2).everySecond(4).finalize(), 4);
 
         Future<Void> fight = CompletableFuture.runAsync(() -> warrior.run());
 
@@ -42,30 +42,31 @@ public class AnotherDesignTester {
     @Test
     public void scansWeaponAndRegistersItAndRetrievesItAndShoots() throws Exception {
 
-        JOffensive g = JOffensive.newOffensive()
+        try(JOffensive g = JOffensive.newOffensive()
                 .shootTimeout(3, TimeUnit.SECONDS)
                 .scanAnnotatedWeaponClasses("cz.jalasoft.joffensive")
-                .get();
+                .get()) {
 
-        Weapon weapon = g.weapon("hovnomet");
+            Weapon weapon = g.weapon("hovnomet");
 
-        Assert.assertNotNull(weapon);
+            Assert.assertNotNull(weapon);
 
-        Platoon platoon = g
-                .trainingCamp()
-                .ofRecruits(4)
-                .called("Bazanti")
-                .shooting(EvenCadence.evenly().everySecond(4))
-                .havingMagazinesOfSize(2)
-                .graduate();
+            Platoon platoon = g
+                    .trainingCamp()
+                    .ofRecruits(4)
+                    .called("Bazanti")
+                    .shooting(EvenCadence.evenly().everySecond(4))
+                    .havingMagazinesOfSize(2)
+                    .graduate();
 
-        TimeUnit.SECONDS.sleep(3);
+            TimeUnit.SECONDS.sleep(3);
 
-        Battle battle = platoon.fire(weapon);
+            Battle battle = platoon.fire(weapon);
 
-        TimeUnit.SECONDS.sleep(10);
+            TimeUnit.SECONDS.sleep(10);
 
-        battle.ceaseFire();
+            battle.ceaseFire();
+        }
 
 
         /*

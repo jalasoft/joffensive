@@ -52,9 +52,10 @@ public final class WarriorFactory {
     private Warrior newWarrior(WarriorName name, Weapon weapon, Skill skill, Headquarters headquarters) {
 
         Weapon timeoutSensitiveWeapon = new TimeoutSensitiveWeaponDecorator(weapon, config.shootTimeoutValue());
-        Warrior reportingWarrior = new ReportingWarrior(name, timeoutSensitiveWeapon, headquarters);
-        Warrior shootingWarrior = new ShootDrivingWarriorDecorator(reportingWarrior, skill);
-        Warrior timingWarrior = new TimingWarriorDecorator(shootingWarrior, skill);
+
+        Warrior reportingWarrior = new ShootingAndReportingWarrior(name, timeoutSensitiveWeapon, headquarters::warriorReportShoot);
+        Warrior shootingWarrior = new MagazineShootingWarriorDecorator(reportingWarrior, skill);
+        Warrior timingWarrior = new CadenceDrivingWarriorDecorator(shootingWarrior, skill);
         Warrior startingWarrior = new StartingWarriorDecorator(timingWarrior, headquarters.startingLatch());
 
         return startingWarrior;

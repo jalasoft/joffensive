@@ -6,12 +6,12 @@ import java.util.concurrent.CountDownLatch;
  * @author Honza Lastovicka (lastovicka@avast.com)
  * @since 2016-05-28.
  */
-public final class StartingWarriorDecorator implements Warrior {
+final class StartingWarriorDecorator implements Warrior {
 
     private final Warrior decorated;
     private final CountDownLatch startingLatch;
 
-    public StartingWarriorDecorator(Warrior decorated, CountDownLatch startingLatch) {
+    StartingWarriorDecorator(Warrior decorated, CountDownLatch startingLatch) {
         this.decorated = decorated;
         this.startingLatch = startingLatch;
     }

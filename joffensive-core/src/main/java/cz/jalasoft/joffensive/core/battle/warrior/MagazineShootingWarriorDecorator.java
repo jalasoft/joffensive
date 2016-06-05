@@ -8,14 +8,14 @@ import org.slf4j.LoggerFactory;
  * @author Honza Lastovicka (lastovicka@avast.com)
  * @since 2016-05-16.
  */
-final class ShootDrivingWarriorDecorator implements Warrior {
+final class MagazineShootingWarriorDecorator implements Warrior {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(ShootDrivingWarriorDecorator.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(MagazineShootingWarriorDecorator.class);
 
     private final Warrior warrior;
     private final Skill skill;
 
-    public ShootDrivingWarriorDecorator(Warrior warrior, Skill skill) {
+    MagazineShootingWarriorDecorator(Warrior warrior, Skill skill) {
         this.warrior = warrior;
         this.skill = skill;
     }

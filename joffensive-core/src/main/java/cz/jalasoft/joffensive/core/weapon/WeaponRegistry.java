@@ -1,8 +1,13 @@
 package cz.jalasoft.joffensive.core.weapon;
 
 import cz.jalasoft.joffensive.core.Weapon;
+import cz.jalasoft.joffensive.core.WeaponsException;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
+
 
 /**
  * @author Honza Lastovicka (lastovicka@avast.com)
@@ -14,14 +19,6 @@ public final class WeaponRegistry {
 
     public WeaponRegistry(Collection<Weapon> weapons) {
         this.weapons = new ArrayList<>(weapons);
-    }
-
-    public void registerWeapon(Weapon weapon) {
-        if (hasWeapon(weapon.name())) {
-            throw new IllegalArgumentException("Weapon called '" + weapon.name() + "' is already registered.");
-        }
-
-        weapons.add(weapon);
     }
 
     public boolean hasWeapon(String name) {
@@ -39,17 +36,27 @@ public final class WeaponRegistry {
                 .get();
     }
 
-    public void beforeWeapons() throws Exception {
+    public Collection<String> weaponNames() {
+        return weapons.stream()
+                .map(Weapon::name)
+                .collect(toSet());
+    }
+
+    //--------------------------------------------------------------------
+    //BULK LIFECYCLE ACTIONS
+    //--------------------------------------------------------------------
+
+    public void beforeWeapons() throws WeaponsException {
         performLifeCycleOperation(Weapon::beforeWeapon);
     }
 
 
-    public void afterWeapons() throws Exception {
+    public void afterWeapons() throws WeaponsException {
         performLifeCycleOperation(Weapon::afterWeapon);
     }
 
-    private void performLifeCycleOperation(LifeCycleAction action) throws Exception {
-        Exception parentException = new Exception();
+    private void performLifeCycleOperation(LifeCycleAction action) throws WeaponsException {
+        WeaponsException parentException = new WeaponsException();
 
         weapons.forEach(w -> {
             try {

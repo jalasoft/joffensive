@@ -7,11 +7,8 @@ import cz.jalasoft.joffensive.core.battle.ConventionalBattle;
 import cz.jalasoft.joffensive.core.battle.Headquarters;
 import cz.jalasoft.joffensive.core.battle.warrior.Warrior;
 import cz.jalasoft.joffensive.core.battle.warrior.WarriorFactory;
-import cz.jalasoft.joffensive.core.weapon.WeaponFactory;
 import cz.jalasoft.joffensive.core.weapon.WeaponRegistry;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
@@ -23,7 +20,7 @@ import static java.util.concurrent.Executors.newCachedThreadPool;
  * @author Honza Lastovicka (lastovicka@avast.com)
  * @since 2016-04-12.
  */
-public final class JOffensive implements Closeable {
+public final class JOffensive implements AutoCloseable {
 
     public static JOffensiveConfigurer newOffensive() {
         Config config = ConfigFactory.load();
@@ -35,15 +32,24 @@ public final class JOffensive implements Closeable {
     //-----------------------------------------------------
 
     private final WeaponRegistry weaponRegistry;
-    private final WeaponFactory weaponFactory;
     private final WarriorFactory warriorFactory;
 
-    JOffensive(Configuration configuration, Collection<Weapon> weapons) {
+    JOffensive(Configuration configuration, Collection<Weapon> weapons) throws WeaponsException {
         this.weaponRegistry = new WeaponRegistry(weapons);
-        this.weaponFactory = new WeaponFactory();
         this.warriorFactory = new WarriorFactory(configuration);
     }
 
+    //----------------------------------------------------------------------
+    //WEAPONS LIFECYCLE
+    //----------------------------------------------------------------------
+
+    final void beforeWeapons() throws WeaponsException {
+        weaponRegistry.beforeWeapons();
+    }
+
+    private void afterWeapons() throws WeaponsException {
+        weaponRegistry.afterWeapons();
+    }
 
     //----------------------------------------------------------------------
     //CAMP
@@ -61,12 +67,12 @@ public final class JOffensive implements Closeable {
         Headquarters headquarters = new Headquarters();
         Collection<Warrior> warriors = warriorFactory.produceWarriors(platoon, weapon, headquarters);
 
-        ExecutorService executor = ofNullable(customExecutor).orElseGet(this::newBattleExecutor);
+        ExecutorService executor = ofNullable(customExecutor).orElseGet(this::defaultBattleExecutor);
 
         return new ConventionalBattle(warriors, headquarters, executor);
     }
 
-    private ExecutorService newBattleExecutor() {
+    private ExecutorService defaultBattleExecutor() {
         return newCachedThreadPool();
     }
 
@@ -86,8 +92,16 @@ public final class JOffensive implements Closeable {
         return weaponRegistry.weapon(name);
     }
 
-    @Override
-    public void close() throws IOException {
+    public Collection<String> weapons() {
+        return weaponRegistry.weaponNames();
+    }
 
+    //------------------------------------------------------------------------
+    //CLOSING
+    //------------------------------------------------------------------------
+
+    @Override
+    public void close() throws WeaponsException {
+        afterWeapons();
     }
 }
