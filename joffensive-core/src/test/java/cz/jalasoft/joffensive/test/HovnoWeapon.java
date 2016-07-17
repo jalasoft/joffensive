@@ -16,7 +16,7 @@ public class HovnoWeapon {
         System.out.println("Vyndavam zbran");
     }
 
-    @BeforeShoot
+    @BeforeShooting
     public void nabij() {
         System.out.println("Nabijim zbran");
     }
@@ -27,7 +27,7 @@ public class HovnoWeapon {
         return null;
     }
 
-    @AfterShoot
+    @AfterShooting
     public void vycisti() {
         System.out.println("Cistim zbran");
     }

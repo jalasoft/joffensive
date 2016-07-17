@@ -1,6 +1,9 @@
 package cz.jalasoft.joffensive.core;
 
+import cz.jalasoft.joffensive.core.weapon.definition.WeaponDefinition;
+
 import java.time.Duration;
+import java.util.Collection;
 
 /**
  * @author Honza Lastovicka (lastovicka@avast.com)
@@ -9,12 +12,18 @@ import java.time.Duration;
 public final class Configuration {
 
     private final Duration shootTimeout;
+    private final Collection<WeaponDefinition> weaponDefinitions;
 
     Configuration(JOffensiveConfigurer configurer) {
-        this.shootTimeout = configurer.shootTimeout;
+        this.shootTimeout = configurer.shootTimeout();
+        this.weaponDefinitions = configurer.weaponDefinitions();
     }
 
-    public Duration shootTimeoutValue() {
+    public Duration shootTimeout() {
         return this.shootTimeout;
+    }
+
+    public Collection<WeaponDefinition> weaponDefinitions() {
+        return weaponDefinitions;
     }
 }

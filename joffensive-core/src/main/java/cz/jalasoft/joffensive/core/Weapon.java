@@ -12,11 +12,11 @@ public interface Weapon {
 
     default void beforeWeapon() throws Exception {}
 
-    default void beforeShoot() throws Exception {}
+    default void beforeShooting() throws Exception {}
 
     Recoil shoot() throws Exception;
 
-    default void afterShoot() throws Exception {}
+    default void afterShooting() throws Exception {}
 
     default void afterWeapon() throws Exception {}
 }

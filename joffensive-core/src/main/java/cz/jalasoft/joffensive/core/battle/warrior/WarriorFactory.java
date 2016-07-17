@@ -54,7 +54,19 @@ public final class WarriorFactory {
         Weapon timeoutSensitiveWeapon = new TimeoutSensitiveWeaponDecorator(weapon, config.shootTimeoutValue());
 
         Warrior reportingWarrior = new ShootingAndReportingWarrior(name, timeoutSensitiveWeapon, headquarters::warriorReportShoot);
-        Warrior shootingWarrior = new MagazineShootingWarriorDecorator(reportingWarrior, skill);
+        Warrior shootingWarrior = new MagazineShootingWarriorDecorator(reportingWarrior, skill) {
+
+            @Override
+            void beforeMagazineShootOut() {
+
+            }
+
+            @Override
+            void afterMagazineShootOut() {
+
+            }
+        };
+
         Warrior timingWarrior = new CadenceDrivingWarriorDecorator(shootingWarrior, skill);
         Warrior startingWarrior = new StartingWarriorDecorator(timingWarrior, headquarters.startingLatch());
 

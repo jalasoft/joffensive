@@ -6,5 +6,7 @@ package cz.jalasoft.joffensive.core;
  */
 public interface Cadence {
 
-    boolean shootNow(long secondsSinceStart);
+    boolean canShootNow(long secondsSinceStart);
+
+    boolean isFinished();
 }

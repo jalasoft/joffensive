@@ -29,9 +29,9 @@ final class WeaponClassIntrospection implements WeaponAnnotationIntrospection {
         validateParameterlessConstructor();
 
         validateLifecycleMethod(BeforeWeapon.class);
-        validateLifecycleMethod(BeforeShoot.class);
+        validateLifecycleMethod(BeforeShooting.class);
         validateShootMethod();
-        validateLifecycleMethod(AfterShoot.class);
+        validateLifecycleMethod(AfterShooting.class);
         validateLifecycleMethod(AfterWeapon.class);
 
         WeaponType.Builder builder = WeaponType.newDefinition()
@@ -39,8 +39,8 @@ final class WeaponClassIntrospection implements WeaponAnnotationIntrospection {
                 .called(examinedType.annotation(Shoot.class).value());
 
         examinedType.tryAnnotatedMethod(BeforeWeapon.class).ifPresent(m -> builder.beforeWeapon(method(m, Void.class)));
-        examinedType.tryAnnotatedMethod(BeforeShoot.class).ifPresent(m -> builder.beforeShoot(method(m, Void.class)));
-        examinedType.tryAnnotatedMethod(AfterShoot.class).ifPresent(m -> builder.afterShoot(method(m, Void.class)));
+        examinedType.tryAnnotatedMethod(BeforeShooting.class).ifPresent(m -> builder.beforeShoot(method(m, Void.class)));
+        examinedType.tryAnnotatedMethod(AfterShooting.class).ifPresent(m -> builder.afterShoot(method(m, Void.class)));
         examinedType.tryAnnotatedMethod(AfterWeapon.class).ifPresent(m -> builder.afterWeapon(method(m, Void.class)));
 
         Method shootMethod = examinedType.annotatedMethod(Shoot.class);

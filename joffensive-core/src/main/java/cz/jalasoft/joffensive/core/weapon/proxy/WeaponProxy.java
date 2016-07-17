@@ -30,7 +30,7 @@ public final class WeaponProxy implements Weapon {
     }
 
     @Override
-    public void beforeShoot() throws Exception {
+    public void beforeShooting() throws Exception {
         invokeSafely(weaponType.beforeShoot());
     }
 
@@ -40,7 +40,7 @@ public final class WeaponProxy implements Weapon {
     }
 
     @Override
-    public void afterShoot() throws Exception {
+    public void afterShooting() throws Exception {
         invokeSafely(weaponType.afterShoot());
     }
 

@@ -1,17 +1,19 @@
 package cz.jalasoft.joffensive.core;
 
 
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 import cz.jalasoft.joffensive.core.battle.ConventionalBattle;
 import cz.jalasoft.joffensive.core.battle.Headquarters;
 import cz.jalasoft.joffensive.core.battle.warrior.Warrior;
 import cz.jalasoft.joffensive.core.battle.warrior.WarriorFactory;
 import cz.jalasoft.joffensive.core.weapon.WeaponRegistry;
+import cz.jalasoft.joffensive.core.weapon.definition.WeaponDefinition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
 import static java.util.concurrent.Executors.newCachedThreadPool;
@@ -22,9 +24,10 @@ import static java.util.concurrent.Executors.newCachedThreadPool;
  */
 public final class JOffensive implements AutoCloseable {
 
-    public static JOffensiveConfigurer newOffensive() {
-        Config config = ConfigFactory.load();
-        return new JOffensiveConfigurer(config);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JOffensive.class);
+
+    public static JOffensiveConfigurer offensive() {
+        return new JOffensiveConfigurer();
     }
 
     //-----------------------------------------------------
@@ -34,21 +37,24 @@ public final class JOffensive implements AutoCloseable {
     private final WeaponRegistry weaponRegistry;
     private final WarriorFactory warriorFactory;
 
-    JOffensive(Configuration configuration, Collection<Weapon> weapons) throws WeaponsException {
-        this.weaponRegistry = new WeaponRegistry(weapons);
+    JOffensive(Configuration configuration) throws WeaponsException {
+        this.weaponRegistry = new WeaponRegistry(loadWeapons(configuration));
+        this.weaponRegistry.beforeWeapons();
+
         this.warriorFactory = new WarriorFactory(configuration);
     }
 
-    //----------------------------------------------------------------------
-    //WEAPONS LIFECYCLE
-    //----------------------------------------------------------------------
+    private Collection<Weapon> loadWeapons(Configuration configruation) {
+        LOGGER.info("Loading weapons...");
 
-    final void beforeWeapons() throws WeaponsException {
-        weaponRegistry.beforeWeapons();
-    }
+        Collection<Weapon> weapons = configruation.weaponDefinitions()
+                .stream()
+                .map(WeaponDefinition::create)
+                .flatMap(Collection::stream)
+                .peek(weapon -> LOGGER.debug("Weapon '{}' loaded", weapon.name()))
+                .collect(Collectors.toList());
 
-    private void afterWeapons() throws WeaponsException {
-        weaponRegistry.afterWeapons();
+        return weapons;
     }
 
     //----------------------------------------------------------------------
@@ -69,7 +75,7 @@ public final class JOffensive implements AutoCloseable {
 
         ExecutorService executor = ofNullable(customExecutor).orElseGet(this::defaultBattleExecutor);
 
-        return new ConventionalBattle(warriors, headquarters, executor);
+        return new ConventionalBattle(warriors, weapon, headquarters, executor);
     }
 
     private ExecutorService defaultBattleExecutor() {
@@ -82,11 +88,11 @@ public final class JOffensive implements AutoCloseable {
 
     public Weapon weapon(String name) {
         if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Name of weapon must not be null or empty.");
+            throw new IllegalArgumentException("Name of addWeapon must not be null or empty.");
         }
 
         if (!weaponRegistry.hasWeapon(name)) {
-            new NoSuchElementException("No weapon of called '" + name + "' exists.");
+            new NoSuchElementException("No addWeapon of called '" + name + "' exists.");
         }
 
         return weaponRegistry.weapon(name);
@@ -102,6 +108,6 @@ public final class JOffensive implements AutoCloseable {
 
     @Override
     public void close() throws WeaponsException {
-        afterWeapons();
+        weaponRegistry.afterWeapons();
     }
 }

@@ -71,6 +71,10 @@ public final class WeaponRegistry {
         }
     }
 
+    //-------------------------------------------------------------------------
+    //LIFECYCLE ACTION
+    //-------------------------------------------------------------------------
+
     private interface LifeCycleAction {
         void execute(Weapon w) throws Exception;
     }

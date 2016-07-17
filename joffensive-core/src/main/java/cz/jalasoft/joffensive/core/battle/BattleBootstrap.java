@@ -1,13 +1,9 @@
 package cz.jalasoft.joffensive.core.battle;
 
 import cz.jalasoft.joffensive.core.Battle;
-import cz.jalasoft.joffensive.core.Configuration;
 import cz.jalasoft.joffensive.core.Platoon;
 import cz.jalasoft.joffensive.core.Weapon;
-import cz.jalasoft.joffensive.core.battle.warrior.Warrior;
-import cz.jalasoft.joffensive.core.battle.warrior.WarriorFactory;
 
-import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 
 /**

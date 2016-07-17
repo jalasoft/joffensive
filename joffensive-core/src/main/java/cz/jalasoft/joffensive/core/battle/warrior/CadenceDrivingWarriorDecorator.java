@@ -47,7 +47,7 @@ final class CadenceDrivingWarriorDecorator implements Warrior {
     }
 
     private void shootMagazinesOut(int secondsSinceStart) {
-        if (skill.cadence().shootNow(secondsSinceStart)) {
+        if (skill.cadence().canShootNow(secondsSinceStart)) {
             warrior.fight();
         }
     }

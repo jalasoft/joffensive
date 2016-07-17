@@ -16,9 +16,9 @@ public class AnotherDesignTester {
     @Test
     public void weaponShootsOneBullet() {
 
-        Weapon weapon = HttpWeapon.newWeapon().methodGet().target("http://vodnisvetkolin-jalasoft.rhcloud.com:80/status").finalize();
+        Weapon addWeapon = HttpWeapon.newWeapon().methodGet().target("http://vodnisvetkolin-jalasoft.rhcloud.com:80/status").finalize();
 
-        Recoil result = weapon.shoot();
+        Recoil result = addWeapon.shoot();
 
         System.out.println(result);
     }
@@ -26,9 +26,9 @@ public class AnotherDesignTester {
     @Test
     public void warriorShoots() throws IOException, InterruptedException {
 
-        Weapon weapon = HttpWeapon.newWeapon().target("http://vodnisvetkolin-jalasoft.rhcloud.com:80/status").methodGet().finalize();
+        Weapon addWeapon = HttpWeapon.newWeapon().target("http://vodnisvetkolin-jalasoft.rhcloud.com:80/status").methodGet().finalize();
 
-        ShootingAndReportingWarrior warrior = new ShootingAndReportingWarrior("w1", weapon, EvenCadence.shooting().afterSeconds(2).everySecond(4).finalize(), 4);
+        ShootingAndReportingWarrior warrior = new ShootingAndReportingWarrior("w1", addWeapon, EvenCadence.shooting().afterSeconds(2).everySecond(4).finalize(), 4);
 
         Future<Void> fight = CompletableFuture.runAsync(() -> warrior.run());
 
@@ -42,9 +42,9 @@ public class AnotherDesignTester {
     @Test
     public void scansWeaponAndRegistersItAndRetrievesItAndShoots() throws Exception {
 
-        try(JOffensive g = JOffensive.newOffensive()
+        try(JOffensive g = JOffensive.offensive()
                 .shootTimeout(3, TimeUnit.SECONDS)
-                .scanAnnotatedWeaponClasses("cz.jalasoft.joffensive")
+                .scanAnnotatedClassesAt("cz.jalasoft.joffensive")
                 .get()) {
 
             Weapon weapon = g.weapon("hovnomet");
@@ -80,8 +80,8 @@ public class AnotherDesignTester {
                 .withBullets(20)
                 .reGroup();
 
-        Shoot weapon = o.weapon("http");
+        Shoot addWeapon = o.addWeapon("http");
 
-        platoon.fire(weapon);*/
+        platoon.fire(addWeapon);*/
     }
 }

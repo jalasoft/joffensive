@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
  * @author Honza Lastovicka (lastovicka@avast.com)
  * @since 2016-05-16.
  */
-final class MagazineShootingWarriorDecorator implements Warrior {
+class MagazineShootingWarriorDecorator implements Warrior {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(MagazineShootingWarriorDecorator.class);
 
@@ -34,16 +34,26 @@ final class MagazineShootingWarriorDecorator implements Warrior {
         }
     }
 
+    void beforeMagazineShootOut() {}
+
     private void shootMagazineInteruptibly() throws InterruptedException {
-        for(int i=0; i<skill.magazineSize(); i++) {
-            interruptIfRequested();
-            shootBulletInterruptibly();
-        }
+            beforeMagazineShootOut();
+
+            try {
+                for (int i = 0; i < skill.magazineSize(); i++) {
+                    interruptIfRequested();
+                    shootBulletInterruptibly();
+                }
+            } finally {
+                afterMagazineShootOut();
+            }
     }
+
+    void afterMagazineShootOut() {}
 
     private void interruptIfRequested() throws InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
-            LOGGER.debug("Interruption requested for warrion {}", warrior.name());
+            LOGGER.debug("Interruption requested for warrior {}", warrior.name());
 
             //reset the status
             Thread.interrupted();
